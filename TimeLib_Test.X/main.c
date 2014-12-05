@@ -43,7 +43,7 @@ void main()
 	TRISB = 0b00000100;
 
 	// Structure that holds human readable time information;
-	struct tm tinfo;
+	struct tm_t tinfo;
 
 	// Local time to get
 	time_t now;

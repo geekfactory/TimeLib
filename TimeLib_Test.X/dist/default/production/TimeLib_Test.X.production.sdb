@@ -4,7 +4,7 @@
 [d chip 16F88 ]
 [d frameptr 6 ]
 "40 C:\Users\Ruben\Documents\GitHub\TimeLib/TimeLib.c
-[e E1040 enTimeStatus `uc
+[e E1015 enTimeStatus `uc
 E_TIME_NOT_SET 0
 E_TIME_NEEDS_SYNC 1
 E_TIME_OK 2
@@ -22,9 +22,9 @@ E_TIME_OK 2
 "66
 [v _time_set time_set `(v  1 e 0 0 ]
 "74
-[v _time_get time_get `(l  1 e 4 0 ]
+[v _time_get time_get `(ul  1 e 4 0 ]
 "105
-[v _time_make time_make `(l  1 e 4 0 ]
+[v _time_make time_make `(ul  1 e 4 0 ]
 "135
 [v _time_break time_break `(v  1 e 0 0 ]
 "189
@@ -136,7 +136,7 @@ E_TIME_OK 2
 "39 C:\Users\Ruben\Documents\GitHub\TimeLib\TimeLib_Test.X\main.c
 [v _main main `(v  1 e 0 0 ]
 "89
-[v _time_provider time_provider `(l  1 e 4 0 ]
+[v _time_provider time_provider `(ul  1 e 4 0 ]
 "103
 [v _putch putch `(v  1 e 0 0 ]
 "116
@@ -148,18 +148,18 @@ E_TIME_OK 2
 "23 C:\Users\Ruben\Documents\GitHub\TimeLib/TimeLib.c
 [v _month_length month_length `DCC[12]uc  1 e 12 0 ]
 "26
-[v _sys_time sys_time `l  1 e 4 0 ]
+[v _sys_time sys_time `ul  1 e 4 0 ]
 "30
-[v _sync_interval sync_interval `l  1 e 4 0 ]
+[v _sync_interval sync_interval `ul  1 e 4 0 ]
 "33
-[v _sync_next sync_next `l  1 e 4 0 ]
+[v _sync_next sync_next `ul  1 e 4 0 ]
 "37
 [v _last_update last_update `ul  1 e 4 0 ]
 "40
-[v _enTimeCurrentStatus enTimeCurrentStatus `E1040  1 e 1 0 ]
+[v _enTimeCurrentStatus enTimeCurrentStatus `E1015  1 e 1 0 ]
 "47
-[v _time_provider_callback time_provider_callback `*.27(l  1 e 1 0 ]
-[s S285 . 1 `uc 1 RBIF 1 0 :1:0 
+[v _time_provider_callback time_provider_callback `*.27(ul  1 e 1 0 ]
+[s S275 . 1 `uc 1 RBIF 1 0 :1:0 
 `uc 1 INT0IF 1 0 :1:1 
 `uc 1 TMR0IF 1 0 :1:2 
 `uc 1 RBIE 1 0 :1:3 
@@ -169,14 +169,14 @@ E_TIME_OK 2
 `uc 1 GIE 1 0 :1:7 
 ]
 "322 C:\Program Files (x86)\Microchip\xc8\v1.33\include\pic16f88.h
-[s S294 . 1 `uc 1 . 1 0 :1:0 
+[s S284 . 1 `uc 1 . 1 0 :1:0 
 `uc 1 INTF 1 0 :1:1 
 `uc 1 . 1 0 :2:2 
 `uc 1 INTE 1 0 :1:4 
 ]
-[u S299 . 1 `S285 1 . 1 0 `S294 1 . 1 0 ]
-[v _INTCONbits INTCONbits `VES299  1 e 1 @11 ]
-[s S122 . 1 `uc 1 TMR1IF 1 0 :1:0 
+[u S289 . 1 `S275 1 . 1 0 `S284 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES289  1 e 1 @11 ]
+[s S120 . 1 `uc 1 TMR1IF 1 0 :1:0 
 `uc 1 TMR2IF 1 0 :1:1 
 `uc 1 CCP1IF 1 0 :1:2 
 `uc 1 SSPIF 1 0 :1:3 
@@ -185,15 +185,15 @@ E_TIME_OK 2
 `uc 1 ADIF 1 0 :1:6 
 ]
 "392
-[u S130 . 1 `S122 1 . 1 0 ]
-[v _PIR1bits PIR1bits `VES130  1 e 1 @12 ]
+[u S128 . 1 `S120 1 . 1 0 ]
+[v _PIR1bits PIR1bits `VES128  1 e 1 @12 ]
 "470
 [v _TMR1L TMR1L `VEuc  1 e 1 @14 ]
 "476
 [v _TMR1H TMR1H `VEuc  1 e 1 @15 ]
 "482
 [v _T1CON T1CON `VEuc  1 e 1 @16 ]
-[s S77 . 1 `uc 1 RX9D 1 0 :1:0 
+[s S75 . 1 `uc 1 RX9D 1 0 :1:0 
 `uc 1 OERR 1 0 :1:1 
 `uc 1 FERR 1 0 :1:2 
 `uc 1 ADDEN 1 0 :1:3 
@@ -203,18 +203,18 @@ E_TIME_OK 2
 `uc 1 SPEN 1 0 :1:7 
 ]
 "809
-[s S86 . 1 `uc 1 RCD8 1 0 :1:0 
+[s S84 . 1 `uc 1 RCD8 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 RC9 1 0 :1:6 
 ]
-[s S90 . 1 `uc 1 . 1 0 :6:0 
+[s S88 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 nRC8 1 0 :1:6 
 ]
-[s S93 . 1 `uc 1 . 1 0 :6:0 
+[s S91 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 RC8_9 1 0 :1:6 
 ]
-[u S96 . 1 `S77 1 . 1 0 `S86 1 . 1 0 `S90 1 . 1 0 `S93 1 . 1 0 ]
-[v _RCSTAbits RCSTAbits `VES96  1 e 1 @24 ]
+[u S94 . 1 `S75 1 . 1 0 `S84 1 . 1 0 `S88 1 . 1 0 `S91 1 . 1 0 ]
+[v _RCSTAbits RCSTAbits `VES94  1 e 1 @24 ]
 "873
 [v _TXREG TXREG `VEuc  1 e 1 @25 ]
 "1055
@@ -222,7 +222,7 @@ E_TIME_OK 2
 "1116
 [v _TRISB TRISB `VEuc  1 e 1 @134 ]
 "1193
-[v _PIE1bits PIE1bits `VES130  1 e 1 @140 ]
+[v _PIE1bits PIE1bits `VES128  1 e 1 @140 ]
 "1605
 [v _TXSTA TXSTA `VEuc  1 e 1 @152 ]
 "1691
@@ -248,40 +248,40 @@ E_TIME_OK 2
 "354 C:\Program Files (x86)\Microchip\xc8\v1.33\sources\common\doprnt.c
 [v _dpowers dpowers `DCC[5]ui  1 s 10 dpowers ]
 "35 C:\Users\Ruben\Documents\GitHub\TimeLib\TimeLib_Test.X\main.c
-[v _initialt initialt `l  1 e 4 0 ]
+[v _initialt initialt `ul  1 e 4 0 ]
 "39
 [v _main main `(v  1 e 0 0 ]
 {
-[s S22 tm 18 `i 1 tm_sec 2 0 `i 1 tm_min 2 2 `i 1 tm_hour 2 4 `i 1 tm_mday 2 6 `i 1 tm_mon 2 8 `i 1 tm_year 2 10 `i 1 tm_wday 2 12 `i 1 tm_yday 2 14 `i 1 tm_isdst 2 16 ]
+[s S22 tm_t 7 `uc 1 tm_sec 1 0 `uc 1 tm_min 1 1 `uc 1 tm_hour 1 2 `uc 1 tm_wday 1 3 `uc 1 tm_mday 1 4 `uc 1 tm_mon 1 5 `uc 1 tm_year 1 6 ]
 "46
-[v main@tinfo tinfo `S22  1 a 18 8 ]
+[v main@tinfo tinfo `S22  1 a 7 8 ]
 "52
 [v main@last last `ul  1 a 4 4 ]
 "49
-[v main@now now `l  1 a 4 0 ]
+[v main@now now `ul  1 a 4 0 ]
 "87
 } 0
 "189 C:\Users\Ruben\Documents\GitHub\TimeLib/TimeLib.c
 [v _time_set_provider time_set_provider `(v  1 e 0 0 ]
 {
-[v time_set_provider@callback callback `*.27(l  1 a 1 wreg ]
-[v time_set_provider@callback callback `*.27(l  1 a 1 wreg ]
-[v time_set_provider@timespan timespan `l  1 p 4 24 ]
+[v time_set_provider@callback callback `*.27(ul  1 a 1 wreg ]
+[v time_set_provider@callback callback `*.27(ul  1 a 1 wreg ]
+[v time_set_provider@timespan timespan `ul  1 p 4 24 ]
 "192
-[v time_set_provider@callback callback `*.27(l  1 a 1 28 ]
+[v time_set_provider@callback callback `*.27(ul  1 a 1 28 ]
 "202
 } 0
 "74
-[v _time_get time_get `(l  1 e 4 0 ]
+[v _time_get time_get `(ul  1 e 4 0 ]
 {
 "76
-[v time_get@now now `l  1 a 4 20 ]
+[v time_get@now now `ul  1 a 4 20 ]
 "103
 } 0
 "66
 [v _time_set time_set `(v  1 e 0 0 ]
 {
-[v time_set@now now `l  1 p 4 4 ]
+[v time_set@now now `ul  1 p 4 4 ]
 "72
 } 0
 "44 C:\Users\Ruben\Documents\GitHub\TimeLib/Tick/Tick-PIC16.c
@@ -295,24 +295,24 @@ E_TIME_OK 2
 "71
 } 0
 "89 C:\Users\Ruben\Documents\GitHub\TimeLib\TimeLib_Test.X\main.c
-[v _time_provider time_provider `(l  1 e 4 0 ]
+[v _time_provider time_provider `(ul  1 e 4 0 ]
 {
 "96
 } 0
 "105 C:\Users\Ruben\Documents\GitHub\TimeLib/TimeLib.c
-[v _time_make time_make `(l  1 e 4 0 ]
+[v _time_make time_make `(ul  1 e 4 0 ]
 {
-[s S22 tm 18 `i 1 tm_sec 2 0 `i 1 tm_min 2 2 `i 1 tm_hour 2 4 `i 1 tm_mday 2 6 `i 1 tm_mon 2 8 `i 1 tm_year 2 10 `i 1 tm_wday 2 12 `i 1 tm_yday 2 14 `i 1 tm_isdst 2 16 ]
+[s S22 tm_t 7 `uc 1 tm_sec 1 0 `uc 1 tm_min 1 1 `uc 1 tm_hour 1 2 `uc 1 tm_wday 1 3 `uc 1 tm_mday 1 4 `uc 1 tm_mon 1 5 `uc 1 tm_year 1 6 ]
 [v time_make@timeinfo timeinfo `*.4S22  1 a 1 wreg ]
 "108
-[v time_make@tstamp tstamp `ul  1 a 4 27 ]
+[v time_make@tstamp tstamp `ul  1 a 4 25 ]
 "107
-[v time_make@i i `i  1 a 2 31 ]
+[v time_make@i i `i  1 a 2 29 ]
 "105
 [v time_make@timeinfo timeinfo `*.4S22  1 a 1 wreg ]
 "112
 "105
-[v time_make@timeinfo timeinfo `*.4S22  1 a 1 33 ]
+[v time_make@timeinfo timeinfo `*.4S22  1 a 1 31 ]
 "133
 } 0
 "15 C:\Program Files (x86)\Microchip\xc8\v1.33\sources\common\Umul32.c
@@ -339,8 +339,8 @@ E_TIME_OK 2
 "138
 [v time_break@monthLength monthLength `uc  1 a 1 38 ]
 "135
-[v time_break@timeinput timeinput `l  1 p 4 17 ]
-[s S22 tm 18 `i 1 tm_sec 2 0 `i 1 tm_min 2 2 `i 1 tm_hour 2 4 `i 1 tm_mday 2 6 `i 1 tm_mon 2 8 `i 1 tm_year 2 10 `i 1 tm_wday 2 12 `i 1 tm_yday 2 14 `i 1 tm_isdst 2 16 ]
+[v time_break@timeinput timeinput `ul  1 p 4 17 ]
+[s S22 tm_t 7 `uc 1 tm_sec 1 0 `uc 1 tm_min 1 1 `uc 1 tm_hour 1 2 `uc 1 tm_wday 1 3 `uc 1 tm_mday 1 4 `uc 1 tm_mon 1 5 `uc 1 tm_year 1 6 ]
 [v time_break@timeinfo timeinfo `*.4S22  1 p 1 21 ]
 "187
 } 0
@@ -381,10 +381,10 @@ E_TIME_OK 2
 [v _printf printf `(i  1 e 2 0 ]
 {
 [v printf@f f `*.24DCCuc  1 a 1 wreg ]
-[s S365 . 4 `*.1DCCuc 1 _cp 2 0 `ui 1 _len 2 2 ]
+[s S355 . 4 `*.1DCCuc 1 _cp 2 0 `ui 1 _len 2 2 ]
 "533
-[u S368 . 4 `ui 1 _val 2 0 `S365 1 _str 4 0 ]
-[v printf@_val _val `S368  1 a 4 29 ]
+[u S358 . 4 `ui 1 _val 2 0 `S355 1 _str 4 0 ]
+[v printf@_val _val `S358  1 a 4 29 ]
 "501
 [v printf@width width `i  1 a 2 35 ]
 "499

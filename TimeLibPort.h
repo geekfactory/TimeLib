@@ -20,24 +20,30 @@
 #ifndef TIMELIBPORT_H
 #define	TIMELIBPORT_H
 
-#if defined( PLIB_PIC16 )
+#if defined( PLIB_PIC16 ) || defined( PLIB_PIC18 )
 
 #include <xc.h>
-#include "stdint.h"
-// Include project specific header file
-#include "Config.h"
+#include <stdint.h>
 
-#elif defined( PLIB_PIC18 )
+#elif defined( PLIB_AVR )
 
-#include <xc.h>
-#include "stdint.h"
-// Include project specific header file
-#include "Config.h"
+#include <stdint.h">
 
-#elif defined( PLIB_ARDUINO )
+#elif defined( ARDUINO )
 
-#include "Arduino.h"
-#include "Config.h"
+#if ARDUINO < 100
+#include <WProgram.h>
+#else
+#include <Arduino.h>
+#endif
+#include <stddef.h>
+#include <stdint.h>
+
+#define TICKS_PER_SECOND    1000ull
+#define TICK_SECOND	((unsigned long long)TICKS_PER_SECOND)
+#define TICK_MINUTE	((unsigned long long)TICKS_PER_SECOND*60ull)
+#define TICK_HOUR	((unsigned long long)TICKS_PER_SECOND*3600ull)
+#define tick_get() millis()
 
 #endif
 

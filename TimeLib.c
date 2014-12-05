@@ -102,7 +102,7 @@ time_t time_get()
 	return sys_time;
 }
 
-time_t time_make(struct tm * timeinfo)
+time_t time_make(struct tm_t * timeinfo)
 {
 	int i;
 	uint32_t tstamp;
@@ -132,7 +132,7 @@ time_t time_make(struct tm * timeinfo)
 	return tstamp;
 }
 
-void time_break(time_t timeinput, struct tm * timeinfo)
+void time_break(time_t timeinput, struct tm_t * timeinfo)
 {
 	uint8_t year;
 	uint8_t month, monthLength;

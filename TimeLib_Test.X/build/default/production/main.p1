@@ -6,28 +6,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TRISA `Vuc ~T0 @X0 0 e@133 ]
 "1116
 [v _TRISB `Vuc ~T0 @X0 0 e@134 ]
-"12 C:\Program Files (x86)\Microchip\xc8\v1.33\include\time.h
-[s S94 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 ]
-[n S94 tm tm_sec tm_min tm_hour tm_mday tm_mon tm_year tm_wday tm_yday tm_isdst ]
+"46 ../TimeLib.h
+[s S94 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
+[n S94 tm_t tm_sec tm_min tm_hour tm_wday tm_mday tm_mon tm_year ]
 "54 ../Tick/Tick.h
 [v _tick_init `(v ~T0 @X0 0 ef ]
-"95 ../TimeLib.h
-[v _time_make `(l ~T0 @X0 0 ef1`*S94 ]
-"69
-[v _time_set `(v ~T0 @X0 0 ef1`l ]
-[v F1228 `(l ~T0 @X0 0 tf ]
-"120
-[v _time_set_provider `(v ~T0 @X0 0 ef2`*F1228`l ]
+"109 ../TimeLib.h
+[v _time_make `(ul ~T0 @X0 0 ef1`*S94 ]
+"83
+[v _time_set `(v ~T0 @X0 0 ef1`ul ]
+[v F1206 `(ul ~T0 @X0 0 tf ]
+"134
+[v _time_set_provider `(v ~T0 @X0 0 ef2`*F1206`ul ]
 "37 main.c
-[v _time_provider `(l ~T0 @X0 0 ef ]
+[v _time_provider `(ul ~T0 @X0 0 ef ]
 "206 C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdio.h
 [v _printf `(i ~T0 @X0 0 ev`*Cuc ]
 "66 ../Tick/Tick.h
 [v _tick_get `(ul ~T0 @X0 0 ef ]
-"81 ../TimeLib.h
-[v _time_get `(l ~T0 @X0 0 ef ]
-"106
-[v _time_break `(v ~T0 @X0 0 ef2`l`*S94 ]
+"95 ../TimeLib.h
+[v _time_get `(ul ~T0 @X0 0 ef ]
+"120
+[v _time_break `(v ~T0 @X0 0 ef2`ul`*S94 ]
 "1605 C:\Program Files (x86)\Microchip\xc8\v1.33\include\pic16f88.h
 [v _TXSTA `Vuc ~T0 @X0 0 e@152 ]
 "785
@@ -1051,27 +1051,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdlib.h: 109: extern char * ltoa(char * buf, long val, int base);
 [; ;stdlib.h: 110: extern char * ultoa(char * buf, unsigned long val, int base);
 [; ;stdlib.h: 112: extern char * ftoa(float f, int * status);
-[; ;time.h: 11: typedef long time_t;
-[; ;time.h: 12: struct tm {
-[; ;time.h: 13: int tm_sec;
-[; ;time.h: 14: int tm_min;
-[; ;time.h: 15: int tm_hour;
-[; ;time.h: 16: int tm_mday;
-[; ;time.h: 17: int tm_mon;
-[; ;time.h: 18: int tm_year;
-[; ;time.h: 19: int tm_wday;
-[; ;time.h: 20: int tm_yday;
-[; ;time.h: 21: int tm_isdst;
-[; ;time.h: 22: };
-[; ;time.h: 30: extern int time_zone;
-[; ;time.h: 35: extern time_t time(time_t *);
-[; ;time.h: 36: extern int stime(time_t *);
-[; ;time.h: 37: extern char * asctime(const struct tm *);
-[; ;time.h: 38: extern char * ctime(const time_t *);
-[; ;time.h: 39: extern struct tm * gmtime(const time_t *);
-[; ;time.h: 40: extern struct tm * localtime(const time_t *);
-[; ;time.h: 41: extern time_t mktime(struct tm *);
-[; ;time.h: 48: extern size_t strftime(char *, size_t, const char *, const struct tm *) ;
 [; ;stdint.h: 13: typedef signed char int8_t;
 [; ;stdint.h: 20: typedef signed int int16_t;
 [; ;stdint.h: 28: typedef signed short long int int24_t;
@@ -1103,17 +1082,27 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Tick.h: 54: void tick_init();
 [; ;Tick.h: 66: uint32_t tick_get();
 [; ;Tick.h: 75: void tick_update();
-[; ;TimeLib.h: 45: enum enTimeStatus {
-[; ;TimeLib.h: 46: E_TIME_NOT_SET = 0,
-[; ;TimeLib.h: 47: E_TIME_NEEDS_SYNC,
-[; ;TimeLib.h: 48: E_TIME_OK,
-[; ;TimeLib.h: 49: };
-[; ;TimeLib.h: 53: typedef time_t(* time_callback_t)();
-[; ;TimeLib.h: 69: void time_set(time_t now);
-[; ;TimeLib.h: 81: time_t time_get();
-[; ;TimeLib.h: 95: time_t time_make(struct tm * timeinfo);
-[; ;TimeLib.h: 106: void time_break(time_t timeinput, struct tm * timeinfo);
-[; ;TimeLib.h: 120: void time_set_provider(time_callback_t callback, time_t timespan);
+[; ;TimeLib.h: 43: typedef unsigned long time_t;
+[; ;TimeLib.h: 46: struct tm_t{
+[; ;TimeLib.h: 47: uint8_t tm_sec;
+[; ;TimeLib.h: 48: uint8_t tm_min;
+[; ;TimeLib.h: 49: uint8_t tm_hour;
+[; ;TimeLib.h: 50: uint8_t tm_wday;
+[; ;TimeLib.h: 51: uint8_t tm_mday;
+[; ;TimeLib.h: 52: uint8_t tm_mon;
+[; ;TimeLib.h: 53: uint8_t tm_year;
+[; ;TimeLib.h: 54: };
+[; ;TimeLib.h: 59: enum enTimeStatus {
+[; ;TimeLib.h: 60: E_TIME_NOT_SET = 0,
+[; ;TimeLib.h: 61: E_TIME_NEEDS_SYNC,
+[; ;TimeLib.h: 62: E_TIME_OK,
+[; ;TimeLib.h: 63: };
+[; ;TimeLib.h: 67: typedef time_t(* time_callback_t)();
+[; ;TimeLib.h: 83: void time_set(time_t now);
+[; ;TimeLib.h: 95: time_t time_get();
+[; ;TimeLib.h: 109: time_t time_make(struct tm_t * timeinfo);
+[; ;TimeLib.h: 120: void time_break(time_t timeinput, struct tm_t * timeinfo);
+[; ;TimeLib.h: 134: void time_set_provider(time_callback_t callback, time_t timespan);
 "20 main.c
 [p x FOSC=XT ]
 "21
@@ -1139,7 +1128,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "32
 [p x IESO=OFF ]
 "35
-[v _initialt `l ~T0 @X0 1 e ]
+[v _initialt `ul ~T0 @X0 1 e ]
 [; ;main.c: 35: time_t initialt;
 [; ;main.c: 37: time_t time_provider();
 "39
@@ -1162,31 +1151,31 @@ Version 3.2 HI-TECH Software Intermediate Code
 "46
 [v _tinfo `S94 ~T0 @X0 1 a ]
 "49
-[v _now `l ~T0 @X0 1 a ]
+[v _now `ul ~T0 @X0 1 a ]
 "52
 [v _last `ul ~T0 @X0 1 a ]
-[; ;main.c: 46: struct tm tinfo;
+[; ;main.c: 46: struct tm_t tinfo;
 [; ;main.c: 49: time_t now;
 [; ;main.c: 52: uint32_t last = 0;
 [e = _last -> -> -> 0 `i `l `ul ]
 [; ;main.c: 55: tinfo.tm_year = 14;
 "55
-[e = . _tinfo 5 -> 14 `i ]
+[e = . _tinfo 6 -> -> 14 `i `uc ]
 [; ;main.c: 56: tinfo.tm_mon = 1;
 "56
-[e = . _tinfo 4 -> 1 `i ]
+[e = . _tinfo 5 -> -> 1 `i `uc ]
 [; ;main.c: 57: tinfo.tm_mday = 1;
 "57
-[e = . _tinfo 3 -> 1 `i ]
+[e = . _tinfo 4 -> -> 1 `i `uc ]
 [; ;main.c: 58: tinfo.tm_hour = 13;
 "58
-[e = . _tinfo 2 -> 13 `i ]
+[e = . _tinfo 2 -> -> 13 `i `uc ]
 [; ;main.c: 59: tinfo.tm_min = 55;
 "59
-[e = . _tinfo 1 -> 55 `i ]
+[e = . _tinfo 1 -> -> 55 `i `uc ]
 [; ;main.c: 60: tinfo.tm_sec = 30;
 "60
-[e = . _tinfo 0 -> 30 `i ]
+[e = . _tinfo 0 -> -> 30 `i `uc ]
 [; ;main.c: 63: tick_init();
 "63
 [e ( _tick_init ..  ]
@@ -1198,7 +1187,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _time_set (1 _initialt ]
 [; ;main.c: 69: time_set_provider(&time_provider, (86400UL));
 "69
-[e ( _time_set_provider (2 , &U _time_provider -> -> 86400 `ul `l ]
+[e ( _time_set_provider (2 , &U _time_provider -> 86400 `ul ]
 [; ;main.c: 71: printf("TimeLib Test Program\r\n");
 "71
 [e ( _printf :s 1C ]
@@ -1222,7 +1211,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _time_break (2 , _now &U _tinfo ]
 [; ;main.c: 83: printf("Time: %02d:%02d:%02d Date: %02d/%02d/%02d\r\n", tinfo.tm_hour, tinfo.tm_min, tinfo.tm_sec, tinfo.tm_mday, tinfo.tm_mon, tinfo.tm_year);
 "83
-[e ( _printf , , , , , , (. :s 2C . _tinfo 2 . _tinfo 1 . _tinfo 0 . _tinfo 3 . _tinfo 4 . _tinfo 5 ]
+[e ( _printf , , , , , , (. :s 2C -> . _tinfo 2 `i -> . _tinfo 1 `i -> . _tinfo 0 `i -> . _tinfo 4 `i -> . _tinfo 5 `i -> . _tinfo 6 `i ]
 "84
 }
 [e :U 99 ]
@@ -1238,7 +1227,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 95 ]
 }
 "89
-[v _time_provider `(l ~T0 @X0 1 ef ]
+[v _time_provider `(ul ~T0 @X0 1 ef ]
 "90
 {
 [; ;main.c: 89: time_t time_provider()
@@ -1284,9 +1273,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "110
 [e :UE 101 ]
 }
-[v F1251 `(v ~T0 @X0 1 tf ]
+[v F1229 `(v ~T0 @X0 1 tf ]
 "116
-[v _isr `IF1251 ~T0 @X0 1 e ]
+[v _isr `IF1229 ~T0 @X0 1 e ]
 "117
 {
 [; ;main.c: 116: void interrupt isr(void)

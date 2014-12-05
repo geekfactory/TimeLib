@@ -1,37 +1,13 @@
 Version 3.2 HI-TECH Software Intermediate Code
 "40 ../TimeLib.c
-[c E1040 0 1 2 .. ]
-[n E1040 enTimeStatus E_TIME_NOT_SET E_TIME_NEEDS_SYNC E_TIME_OK  ]
-[v F1045 `(l ~T0 @X0 0 tf ]
+[c E1015 0 1 2 .. ]
+[n E1015 enTimeStatus E_TIME_NOT_SET E_TIME_NEEDS_SYNC E_TIME_OK  ]
+[v F1020 `(ul ~T0 @X0 0 tf ]
 "66 ../Tick/Tick.h
 [v _tick_get `(ul ~T0 @X0 0 ef ]
-"12 C:\Program Files (x86)\Microchip\xc8\v1.33\include\time.h
-[s S1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 `i 1 ]
-[n S1 tm tm_sec tm_min tm_hour tm_mday tm_mon tm_year tm_wday tm_yday tm_isdst ]
-[; ;time.h: 4: typedef int ptrdiff_t;
-[; ;time.h: 5: typedef unsigned size_t;
-[; ;time.h: 6: typedef unsigned short wchar_t;
-[; ;time.h: 11: typedef long time_t;
-[; ;time.h: 12: struct tm {
-[; ;time.h: 13: int tm_sec;
-[; ;time.h: 14: int tm_min;
-[; ;time.h: 15: int tm_hour;
-[; ;time.h: 16: int tm_mday;
-[; ;time.h: 17: int tm_mon;
-[; ;time.h: 18: int tm_year;
-[; ;time.h: 19: int tm_wday;
-[; ;time.h: 20: int tm_yday;
-[; ;time.h: 21: int tm_isdst;
-[; ;time.h: 22: };
-[; ;time.h: 30: extern int time_zone;
-[; ;time.h: 35: extern time_t time(time_t *);
-[; ;time.h: 36: extern int stime(time_t *);
-[; ;time.h: 37: extern char * asctime(const struct tm *);
-[; ;time.h: 38: extern char * ctime(const time_t *);
-[; ;time.h: 39: extern struct tm * gmtime(const time_t *);
-[; ;time.h: 40: extern struct tm * localtime(const time_t *);
-[; ;time.h: 41: extern time_t mktime(struct tm *);
-[; ;time.h: 48: extern size_t strftime(char *, size_t, const char *, const struct tm *) ;
+"46 ../TimeLib.h
+[s S89 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
+[n S89 tm_t tm_sec tm_min tm_hour tm_wday tm_mday tm_mon tm_year ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 24: extern void __builtin_software_breakpoint(void);
 [; ;pic16f88.h: 47: extern volatile unsigned char INDF @ 0x000;
@@ -971,17 +947,27 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Tick.h: 54: void tick_init();
 [; ;Tick.h: 66: uint32_t tick_get();
 [; ;Tick.h: 75: void tick_update();
-[; ;TimeLib.h: 45: enum enTimeStatus {
-[; ;TimeLib.h: 46: E_TIME_NOT_SET = 0,
-[; ;TimeLib.h: 47: E_TIME_NEEDS_SYNC,
-[; ;TimeLib.h: 48: E_TIME_OK,
-[; ;TimeLib.h: 49: };
-[; ;TimeLib.h: 53: typedef time_t(* time_callback_t)();
-[; ;TimeLib.h: 69: void time_set(time_t now);
-[; ;TimeLib.h: 81: time_t time_get();
-[; ;TimeLib.h: 95: time_t time_make(struct tm * timeinfo);
-[; ;TimeLib.h: 106: void time_break(time_t timeinput, struct tm * timeinfo);
-[; ;TimeLib.h: 120: void time_set_provider(time_callback_t callback, time_t timespan);
+[; ;TimeLib.h: 43: typedef unsigned long time_t;
+[; ;TimeLib.h: 46: struct tm_t{
+[; ;TimeLib.h: 47: uint8_t tm_sec;
+[; ;TimeLib.h: 48: uint8_t tm_min;
+[; ;TimeLib.h: 49: uint8_t tm_hour;
+[; ;TimeLib.h: 50: uint8_t tm_wday;
+[; ;TimeLib.h: 51: uint8_t tm_mday;
+[; ;TimeLib.h: 52: uint8_t tm_mon;
+[; ;TimeLib.h: 53: uint8_t tm_year;
+[; ;TimeLib.h: 54: };
+[; ;TimeLib.h: 59: enum enTimeStatus {
+[; ;TimeLib.h: 60: E_TIME_NOT_SET = 0,
+[; ;TimeLib.h: 61: E_TIME_NEEDS_SYNC,
+[; ;TimeLib.h: 62: E_TIME_OK,
+[; ;TimeLib.h: 63: };
+[; ;TimeLib.h: 67: typedef time_t(* time_callback_t)();
+[; ;TimeLib.h: 83: void time_set(time_t now);
+[; ;TimeLib.h: 95: time_t time_get();
+[; ;TimeLib.h: 109: time_t time_make(struct tm_t * timeinfo);
+[; ;TimeLib.h: 120: void time_break(time_t timeinput, struct tm_t * timeinfo);
+[; ;TimeLib.h: 134: void time_set_provider(time_callback_t callback, time_t timespan);
 "23 ../TimeLib.c
 [v _month_length `Cuc ~T0 @X0 -> 0 `x e ]
 [i _month_length
@@ -1002,21 +988,21 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;TimeLib.c: 23: const unsigned char month_length[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 "26
-[v _sys_time `l ~T0 @X0 1 e ]
+[v _sys_time `ul ~T0 @X0 1 e ]
 [i _sys_time
--> -> 0 `i `l
+-> -> -> 0 `i `l `ul
 ]
 [; ;TimeLib.c: 26: time_t sys_time = 0;
 "30
-[v _sync_interval `l ~T0 @X0 1 e ]
+[v _sync_interval `ul ~T0 @X0 1 e ]
 [i _sync_interval
--> 86400 `l
+-> -> 86400 `l `ul
 ]
 [; ;TimeLib.c: 30: time_t sync_interval = 86400;
 "33
-[v _sync_next `l ~T0 @X0 1 e ]
+[v _sync_next `ul ~T0 @X0 1 e ]
 [i _sync_next
--> -> 0 `i `l
+-> -> -> 0 `i `l `ul
 ]
 [; ;TimeLib.c: 33: time_t sync_next = 0;
 "37
@@ -1026,15 +1012,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [; ;TimeLib.c: 37: unsigned long last_update = 0;
 "40
-[v _enTimeCurrentStatus `E1040 ~T0 @X0 1 e ]
+[v _enTimeCurrentStatus `E1015 ~T0 @X0 1 e ]
 [i _enTimeCurrentStatus
--> . `E1040 0 `E1040
+-> . `E1015 0 `E1015
 ]
 [; ;TimeLib.c: 40: enum enTimeStatus enTimeCurrentStatus = E_TIME_NOT_SET;
 "47
-[v _time_provider_callback `*F1045 ~T0 @X0 1 e ]
+[v _time_provider_callback `*F1020 ~T0 @X0 1 e ]
 [i _time_provider_callback
--> -> 0 `i `*F1045
+-> -> 0 `i `*F1020
 ]
 [; ;TimeLib.c: 47: time_callback_t time_provider_callback = 0;
 "56
@@ -1057,14 +1043,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 90 ]
 }
 "66
-[v _time_set `(v ~T0 @X0 1 ef1`l ]
+[v _time_set `(v ~T0 @X0 1 ef1`ul ]
 "67
 {
 [; ;TimeLib.c: 66: void time_set(time_t now)
 [; ;TimeLib.c: 67: {
 [e :U _time_set ]
 "66
-[v _now `l ~T0 @X0 1 r1 ]
+[v _now `ul ~T0 @X0 1 r1 ]
 "67
 [f ]
 [; ;TimeLib.c: 68: sys_time = now;
@@ -1075,7 +1061,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _sync_next + _now _sync_interval ]
 [; ;TimeLib.c: 70: enTimeCurrentStatus = E_TIME_OK;
 "70
-[e = _enTimeCurrentStatus -> . `E1040 2 `E1040 ]
+[e = _enTimeCurrentStatus -> . `E1015 2 `E1015 ]
 [; ;TimeLib.c: 71: last_update = tick_get();
 "71
 [e = _last_update ( _tick_get ..  ]
@@ -1084,7 +1070,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 91 ]
 }
 "74
-[v _time_get `(l ~T0 @X0 1 ef ]
+[v _time_get `(ul ~T0 @X0 1 ef ]
 "75
 {
 [; ;TimeLib.c: 74: time_t time_get()
@@ -1092,23 +1078,23 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U _time_get ]
 [f ]
 "76
-[v _now `l ~T0 @X0 1 a ]
+[v _now `ul ~T0 @X0 1 a ]
 [; ;TimeLib.c: 76: time_t now = 0;
-[e = _now -> -> 0 `i `l ]
+[e = _now -> -> -> 0 `i `l `ul ]
 [; ;TimeLib.c: 79: if (sync_next <= sys_time) {
 "79
 [e $ ! <= _sync_next _sys_time 93  ]
 {
 [; ;TimeLib.c: 81: if (time_provider_callback != 0) {
 "81
-[e $ ! != _time_provider_callback -> -> 0 `i `*F1045 94  ]
+[e $ ! != _time_provider_callback -> -> 0 `i `*F1020 94  ]
 {
 [; ;TimeLib.c: 83: now = time_provider_callback();
 "83
 [e = _now ( *U _time_provider_callback ..  ]
 [; ;TimeLib.c: 85: if (now != 0)
 "85
-[e $ ! != _now -> -> 0 `i `l 95  ]
+[e $ ! != _now -> -> -> 0 `i `l `ul 95  ]
 [; ;TimeLib.c: 86: time_set(now);
 "86
 [e ( _time_set (1 _now ]
@@ -1122,7 +1108,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _sync_next + _sys_time _sync_interval ]
 [; ;TimeLib.c: 89: enTimeCurrentStatus = (enTimeCurrentStatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
 "89
-[e = _enTimeCurrentStatus -> ? == -> _enTimeCurrentStatus `i -> . `E1040 0 `i : -> . `E1040 0 `i -> . `E1040 1 `i `E1040 ]
+[e = _enTimeCurrentStatus -> ? == -> _enTimeCurrentStatus `i -> . `E1015 0 `i : -> . `E1015 0 `i -> . `E1015 1 `i `E1015 ]
 "90
 }
 [e :U 96 ]
@@ -1142,7 +1128,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 {
 [; ;TimeLib.c: 98: sys_time++;
 "98
-[e ++ _sys_time -> -> 1 `i `l ]
+[e ++ _sys_time -> -> -> 1 `i `l `ul ]
 [; ;TimeLib.c: 99: last_update += ((unsigned long long)((1000000 + 128ull)/8ull));
 "99
 [e =+ _last_update / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul ]
@@ -1162,14 +1148,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 92 ]
 }
 "105
-[v _time_make `(l ~T0 @X0 1 ef1`*S1 ]
+[v _time_make `(ul ~T0 @X0 1 ef1`*S89 ]
 "106
 {
-[; ;TimeLib.c: 105: time_t time_make(struct tm * timeinfo)
+[; ;TimeLib.c: 105: time_t time_make(struct tm_t * timeinfo)
 [; ;TimeLib.c: 106: {
 [e :U _time_make ]
 "105
-[v _timeinfo `*S1 ~T0 @X0 1 r1 ]
+[v _timeinfo `*S89 ~T0 @X0 1 r1 ]
 "106
 [f ]
 "107
@@ -1180,7 +1166,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TimeLib.c: 108: uint32_t tstamp;
 [; ;TimeLib.c: 112: tstamp = timeinfo->tm_year * ((86400UL) * 365);
 "112
-[e = _tstamp * -> -> . *U _timeinfo 5 `l `ul * -> 86400 `ul -> -> -> 365 `i `l `ul ]
+[e = _tstamp * -> . *U _timeinfo 6 `ul * -> 86400 `ul -> -> -> 365 `i `l `ul ]
 [; ;TimeLib.c: 114: for (i = 0; i < timeinfo->tm_year; i++) {
 "114
 {
@@ -1200,7 +1186,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 "114
 [e ++ _i -> 1 `i ]
 [e :U 104 ]
-[e $ < _i . *U _timeinfo 5 101  ]
+[e $ < _i -> . *U _timeinfo 6 `i 101  ]
 [e :U 102 ]
 "117
 }
@@ -1214,7 +1200,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 {
 [; ;TimeLib.c: 120: if (i == 2 && time_is_leap(timeinfo->tm_year + 1970))
 "120
-[e $ ! && == _i -> 2 `i != ( _time_is_leap (1 -> + . *U _timeinfo 5 -> 1970 `i `ui -> 0 `i 110  ]
+[e $ ! && == _i -> 2 `i != ( _time_is_leap (1 -> + -> . *U _timeinfo 6 `i -> 1970 `i `ui -> 0 `i 110  ]
 [; ;TimeLib.c: 121: tstamp += (86400UL) * 29;
 "121
 [e =+ _tstamp * -> 86400 `ul -> -> -> 29 `i `l `ul ]
@@ -1231,14 +1217,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 "119
 [e ++ _i -> 1 `i ]
 [e :U 109 ]
-[e $ < _i . *U _timeinfo 4 106  ]
+[e $ < _i -> . *U _timeinfo 5 `i 106  ]
 [e :U 107 ]
 "124
 }
 [; ;TimeLib.c: 124: }
 [; ;TimeLib.c: 126: tstamp += (uint32_t) (timeinfo->tm_mday - 1) * (uint32_t) (86400UL);
 "126
-[e =+ _tstamp * -> - . *U _timeinfo 3 -> 1 `i `ul -> 86400 `ul ]
+[e =+ _tstamp * -> - -> . *U _timeinfo 4 `i -> 1 `i `ul -> 86400 `ul ]
 [; ;TimeLib.c: 128: tstamp += (uint32_t) timeinfo->tm_hour * (uint32_t) (3600UL);
 "128
 [e =+ _tstamp * -> . *U _timeinfo 2 `ul -> 3600 `ul ]
@@ -1250,22 +1236,22 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e =+ _tstamp -> . *U _timeinfo 0 `ul ]
 [; ;TimeLib.c: 132: return tstamp;
 "132
-[e ) -> _tstamp `l ]
+[e ) _tstamp ]
 [e $UE 100  ]
 [; ;TimeLib.c: 133: }
 "133
 [e :UE 100 ]
 }
 "135
-[v _time_break `(v ~T0 @X0 1 ef2`l`*S1 ]
+[v _time_break `(v ~T0 @X0 1 ef2`ul`*S89 ]
 "136
 {
-[; ;TimeLib.c: 135: void time_break(time_t timeinput, struct tm * timeinfo)
+[; ;TimeLib.c: 135: void time_break(time_t timeinput, struct tm_t * timeinfo)
 [; ;TimeLib.c: 136: {
 [e :U _time_break ]
 "135
-[v _timeinput `l ~T0 @X0 1 r1 ]
-[v _timeinfo `*S1 ~T0 @X0 1 r2 ]
+[v _timeinput `ul ~T0 @X0 1 r1 ]
+[v _timeinfo `*S89 ~T0 @X0 1 r2 ]
 "136
 [f ]
 "137
@@ -1283,28 +1269,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TimeLib.c: 140: unsigned long days;
 [; ;TimeLib.c: 142: xTime = (uint32_t) timeinput;
 "142
-[e = _xTime -> _timeinput `ul ]
+[e = _xTime _timeinput ]
 [; ;TimeLib.c: 143: timeinfo->tm_sec = xTime % 60;
 "143
-[e = . *U _timeinfo 0 -> % _xTime -> -> -> 60 `i `l `ul `i ]
+[e = . *U _timeinfo 0 -> % _xTime -> -> -> 60 `i `l `ul `uc ]
 [; ;TimeLib.c: 145: xTime /= 60;
 "145
 [e =/ _xTime -> -> 60 `uc `ul ]
 [; ;TimeLib.c: 146: timeinfo->tm_min = xTime % 60;
 "146
-[e = . *U _timeinfo 1 -> % _xTime -> -> -> 60 `i `l `ul `i ]
+[e = . *U _timeinfo 1 -> % _xTime -> -> -> 60 `i `l `ul `uc ]
 [; ;TimeLib.c: 148: xTime /= 60;
 "148
 [e =/ _xTime -> -> 60 `uc `ul ]
 [; ;TimeLib.c: 149: timeinfo->tm_hour = xTime % 24;
 "149
-[e = . *U _timeinfo 2 -> % _xTime -> -> -> 24 `i `l `ul `i ]
+[e = . *U _timeinfo 2 -> % _xTime -> -> -> 24 `i `l `ul `uc ]
 [; ;TimeLib.c: 151: xTime /= 24;
 "151
 [e =/ _xTime -> -> 24 `uc `ul ]
 [; ;TimeLib.c: 152: timeinfo->tm_wday = ((xTime + 4) % 7) + 1;
 "152
-[e = . *U _timeinfo 6 -> + % + _xTime -> -> -> 4 `i `l `ul -> -> -> 7 `i `l `ul -> -> -> 1 `i `l `ul `i ]
+[e = . *U _timeinfo 3 -> + % + _xTime -> -> -> 4 `i `l `ul -> -> -> 7 `i `l `ul -> -> -> 1 `i `l `ul `uc ]
 [; ;TimeLib.c: 154: year = 0;
 "154
 [e = _year -> -> 0 `i `uc ]
@@ -1324,7 +1310,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U 115 ]
 [; ;TimeLib.c: 159: timeinfo->tm_year = year;
 "159
-[e = . *U _timeinfo 5 -> _year `i ]
+[e = . *U _timeinfo 6 _year ]
 [; ;TimeLib.c: 161: days -= time_is_leap(1970 + year) ? 366 : 365;
 "161
 [e =- _days -> -> ? != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i : -> 366 `i -> 365 `i `l `ul ]
@@ -1416,29 +1402,29 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TimeLib.c: 184: }
 [; ;TimeLib.c: 185: timeinfo->tm_mon = month + 1;
 "185
-[e = . *U _timeinfo 4 + -> _month `i -> 1 `i ]
+[e = . *U _timeinfo 5 -> + -> _month `i -> 1 `i `uc ]
 [; ;TimeLib.c: 186: timeinfo->tm_mday = xTime + 1;
 "186
-[e = . *U _timeinfo 3 -> + _xTime -> -> -> 1 `i `l `ul `i ]
+[e = . *U _timeinfo 4 -> + _xTime -> -> -> 1 `i `l `ul `uc ]
 [; ;TimeLib.c: 187: }
 "187
 [e :UE 112 ]
 }
 "189
-[v _time_set_provider `(v ~T0 @X0 1 ef2`*F1045`l ]
+[v _time_set_provider `(v ~T0 @X0 1 ef2`*F1020`ul ]
 "190
 {
 [; ;TimeLib.c: 189: void time_set_provider(time_callback_t callback, time_t timespan)
 [; ;TimeLib.c: 190: {
 [e :U _time_set_provider ]
 "189
-[v _callback `*F1045 ~T0 @X0 1 r1 ]
-[v _timespan `l ~T0 @X0 1 r2 ]
+[v _callback `*F1020 ~T0 @X0 1 r1 ]
+[v _timespan `ul ~T0 @X0 1 r2 ]
 "190
 [f ]
 [; ;TimeLib.c: 192: if (callback == 0)
 "192
-[e $ ! == _callback -> -> 0 `i `*F1045 126  ]
+[e $ ! == _callback -> -> 0 `i `*F1020 126  ]
 [; ;TimeLib.c: 193: return;
 "193
 [e $UE 125  ]
@@ -1448,7 +1434,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _time_provider_callback _callback ]
 [; ;TimeLib.c: 197: sync_interval = (timespan == 0) ? (86400UL) : timespan;
 "197
-[e = _sync_interval -> ? == _timespan -> -> 0 `i `l : -> 86400 `ul -> _timespan `ul `l ]
+[e = _sync_interval ? == _timespan -> -> -> 0 `i `l `ul : -> 86400 `ul _timespan ]
 [; ;TimeLib.c: 199: sync_next = sys_time;
 "199
 [e = _sync_next _sys_time ]

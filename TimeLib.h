@@ -23,7 +23,6 @@
 /*-------------------------------------------------------------*/
 /*		Includes and dependencies			*/
 /*-------------------------------------------------------------*/
-#include <time.h>
 #include "TimeLibPort.h"
 #include "Tick/Tick.h"
 
@@ -39,6 +38,21 @@
 /*-------------------------------------------------------------*/
 /*		Typedefs enums & structs			*/
 /*-------------------------------------------------------------*/
+
+#if !defined(__time_t_defined) // avoid conflict with newlib or other posix libc
+typedef unsigned long time_t;
+#endif
+
+struct tm_t{
+uint8_t tm_sec;
+uint8_t tm_min;
+uint8_t tm_hour;
+uint8_t tm_wday; // day of week, sunday is day 1
+uint8_t tm_mday;
+uint8_t tm_mon;
+uint8_t tm_year; // offset from 1970;
+};
+
 /**
  * Enumeration defines the current state of the system time
  */
@@ -92,7 +106,7 @@ time_t time_get();
  *
  * @return The UNIX Timestamp for the given time/date components
  */
-time_t time_make(struct tm * timeinfo);
+time_t time_make(struct tm_t * timeinfo);
 
 /**
  * @brief Get human readable time from Unix time
@@ -103,7 +117,7 @@ time_t time_make(struct tm * timeinfo);
  * @param timeinput The timestamp to convert
  * @param timeinfo Pointer to tm structure to strore the resuling time
  */
-void time_break(time_t timeinput, struct tm * timeinfo);
+void time_break(time_t timeinput, struct tm_t * timeinfo);
 
 /**
  * @brief Sets the callback function that obtains precise time

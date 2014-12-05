@@ -1407,35 +1407,6 @@ extern char * ultoa(char * buf, unsigned long val, int base);
 
 extern char * ftoa(float f, int * status);
 
-# 11 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\time.h"
-typedef long time_t;
-struct tm {
-int tm_sec;
-int tm_min;
-int tm_hour;
-int tm_mday;
-int tm_mon;
-int tm_year;
-int tm_wday;
-int tm_yday;
-int tm_isdst;
-};
-
-# 30
-extern int time_zone;
-
-# 35
-extern time_t time(time_t *);
-extern int stime(time_t *);
-extern char * asctime(const struct tm *);
-extern char * ctime(const time_t *);
-extern struct tm * gmtime(const time_t *);
-extern struct tm * localtime(const time_t *);
-extern time_t mktime(struct tm *);
-
-# 48
-extern size_t strftime(char *, size_t, const char *, const struct tm *) ;
-
 # 13 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdint.h"
 typedef signed char int8_t;
 
@@ -1535,29 +1506,43 @@ uint32_t tick_get();
 # 75
 void tick_update();
 
-# 45 "../TimeLib.h"
+# 43 "../TimeLib.h"
+typedef unsigned long time_t;
+
+
+struct tm_t{
+uint8_t tm_sec;
+uint8_t tm_min;
+uint8_t tm_hour;
+uint8_t tm_wday;
+uint8_t tm_mday;
+uint8_t tm_mon;
+uint8_t tm_year;
+};
+
+# 59
 enum enTimeStatus {
 E_TIME_NOT_SET = 0,
 E_TIME_NEEDS_SYNC,
 E_TIME_OK,
 };
 
-# 53
+# 67
 typedef time_t(* time_callback_t)();
 
-# 69
+# 83
 void time_set(time_t now);
 
-# 81
+# 95
 time_t time_get();
 
-# 95
-time_t time_make(struct tm * timeinfo);
-
-# 106
-void time_break(time_t timeinput, struct tm * timeinfo);
+# 109
+time_t time_make(struct tm_t * timeinfo);
 
 # 120
+void time_break(time_t timeinput, struct tm_t * timeinfo);
+
+# 134
 void time_set_provider(time_callback_t callback, time_t timespan);
 
 
@@ -1588,7 +1573,7 @@ TRISA = 0xFF;
 TRISB = 0b00000100;
 
 
-struct tm tinfo;
+struct tm_t tinfo;
 
 
 time_t now;
