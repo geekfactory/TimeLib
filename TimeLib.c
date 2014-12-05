@@ -19,42 +19,30 @@
  */
 #include "TimeLib.h"
 
-/**
- * Stores the day count for each month
- */
+/* Stores the day count for each month */
 const unsigned char month_length[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-/**
- * Unix time counter, keeps track of absolute time
- */
+/* Unix time counter, keeps track of absolute time */
 time_t sys_time = 0;
 
-/**
- * The interval in seconds after which the system time variable should be updated
- * (synced) with an external time base
- */
+/* The interval in seconds after which the system time variable should be updated
+ * (synced) with an external time base */
 time_t sync_interval = 86400;
 
-/**
- * Unix timestamp when the sync should be done.
- */
+/* Unix timestamp when the sync should be done. */
 time_t sync_next = 0;
 
-/**
- * Variable used to keep track of the last time the "seconds" or sys_time counter
- * was updated in "tick" units
- */
+/* Variable used to keep track of the last time the "seconds" or sys_time counter
+ * was updated in "tick" units */
 unsigned long last_update = 0;
 
-/**
- * Keeps the status of the system time (ok, needs sync, not set, etc).
- */
+/* Keeps the status of the system time (ok, needs sync, not set, etc). */
 enum enTimeStatus enTimeCurrentStatus = E_TIME_NOT_SET;
 
 /**
  * Stores a pointer to a function that returns a precise unix timestamp to set
- * the internal clock to the returned timestamp. This update ocurs at the interval
- * given when the callback is configured
+ * the internal clock to the returned timestamp. This update ocurs at the
+ * interval given when the callback is configured.
  */
 time_callback_t time_provider_callback = 0;
 
@@ -105,7 +93,7 @@ time_t time_get()
 
 	// Check how many seconds have elapsed (if any) since the last call
 	// and update the timestamp counter
-	while (xTickGet() - last_update >= TICK_SECOND) {
+	while (tick_get() - last_update >= TICK_SECOND) {
 		// Increment timestamp
 		sys_time++;
 		last_update += TICK_SECOND;
@@ -117,7 +105,7 @@ time_t time_get()
 time_t time_make(struct tm * timeinfo)
 {
 	int i;
-	DWORD tstamp;
+	uint32_t tstamp;
 
 	// Compute the number of seconds since the year 1970 to the begining of
 	// the given year on the structure, add to the output value
@@ -135,23 +123,23 @@ time_t time_make(struct tm * timeinfo)
 			tstamp += TIME_SECS_PER_DAY * month_length[i - 1];
 	}
 	// Add seconds for past days
-	tstamp += (DWORD) (timeinfo->tm_mday - 1) * (DWORD) TIME_SECS_PER_DAY;
+	tstamp += (uint32_t) (timeinfo->tm_mday - 1) * (uint32_t) TIME_SECS_PER_DAY;
 	// Add seconds on this day
-	tstamp += (DWORD) timeinfo->tm_hour * (DWORD) TIME_SECS_PER_HOUR;
-	tstamp += (DWORD) timeinfo->tm_min * (DWORD) TIME_SECS_PER_MINUTE;
-	tstamp += (DWORD) timeinfo->tm_sec;
+	tstamp += (uint32_t) timeinfo->tm_hour * (uint32_t) TIME_SECS_PER_HOUR;
+	tstamp += (uint32_t) timeinfo->tm_min * (uint32_t) TIME_SECS_PER_MINUTE;
+	tstamp += (uint32_t) timeinfo->tm_sec;
 
 	return tstamp;
 }
 
 void time_break(time_t timeinput, struct tm * timeinfo)
 {
-	BYTE year;
-	BYTE month, monthLength;
-	DWORD xTime;
+	uint8_t year;
+	uint8_t month, monthLength;
+	uint32_t xTime;
 	unsigned long days;
 
-	xTime = (DWORD) timeinput;
+	xTime = (uint32_t) timeinput;
 	timeinfo->tm_sec = xTime % 60;
 
 	xTime /= 60; // now it is minutes

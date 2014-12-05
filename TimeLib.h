@@ -25,7 +25,7 @@
 /*-------------------------------------------------------------*/
 #include <time.h>
 #include "TimeLibPort.h"
-#include "Tick.h"
+#include "Tick/Tick.h"
 
 /*-------------------------------------------------------------*/
 /*		Macros and definitions				*/

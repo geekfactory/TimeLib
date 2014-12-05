@@ -20,6 +20,25 @@
 #ifndef TIMELIBPORT_H
 #define	TIMELIBPORT_H
 
+#if defined( PLIB_PIC16 )
+
+#include <xc.h>
+#include "stdint.h"
+// Include project specific header file
+#include "Config.h"
+
+#elif defined( PLIB_PIC18 )
+
+#include <xc.h>
+#include "stdint.h"
+// Include project specific header file
+#include "Config.h"
+
+#elif defined( PLIB_ARDUINO )
+
+#include "Arduino.h"
+#include "Config.h"
 
 #endif
 
+#endif
