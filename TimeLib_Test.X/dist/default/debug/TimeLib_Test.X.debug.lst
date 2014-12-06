@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC LITE Macro Assembler V1.33 build 59893 
-                                                                                               Fri Dec 05 18:48:16 2014
+                                                                                               Fri Dec 05 18:48:58 2014
 
 Microchip Technology Omniscient Code Generator (Lite mode) build 59893
      1                           	processor	16F88
@@ -5129,7 +5129,7 @@ EEDATA             100      0       0       0        0.0%
 
 
 Microchip Technology PIC Macro Assembler V1.33 build 59893 
-Symbol Table                                                                                   Fri Dec 05 18:48:16 2014
+Symbol Table                                                                                   Fri Dec 05 18:48:58 2014
 
                           pc 0002                  __CFG_CP$OFF 0000                           l48 0D08  
                          l93 0369                           fsr 0004          ___wmul@multiplicand 0022  

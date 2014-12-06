@@ -1,54 +1,10 @@
 Version 3.2 HI-TECH Software Intermediate Code
-[p mainexit ]
-"1691 C:\Program Files (x86)\Microchip\xc8\v1.33\include\pic16f88.h
-[v _ANSEL `Vuc ~T0 @X0 0 e@155 ]
-"1055
-[v _TRISA `Vuc ~T0 @X0 0 e@133 ]
-"1116
-[v _TRISB `Vuc ~T0 @X0 0 e@134 ]
-"46 ../TimeLib.h
-[s S94 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
-[n S94 tm_t tm_sec tm_min tm_hour tm_wday tm_mday tm_mon tm_year ]
-"54 ../Tick/Tick.h
-[v _tick_init `(v ~T0 @X0 0 ef ]
-"111 ../TimeLib.h
-[v _time_make `(ul ~T0 @X0 0 ef1`*S94 ]
-"85
-[v _time_set `(v ~T0 @X0 0 ef1`ul ]
-[v F1206 `(ul ~T0 @X0 0 tf ]
-"136
-[v _time_set_provider `(v ~T0 @X0 0 ef2`*F1206`ul ]
-"37 main.c
-[v _time_provider `(ul ~T0 @X0 0 ef ]
-"206 C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdio.h
-[v _printf `(i ~T0 @X0 0 ev`*Cuc ]
-"66 ../Tick/Tick.h
-[v _tick_get `(ul ~T0 @X0 0 ef ]
-"97 ../TimeLib.h
-[v _time_get `(ul ~T0 @X0 0 ef ]
-"122
-[v _time_break `(v ~T0 @X0 0 ef2`ul`*S94 ]
-"1605 C:\Program Files (x86)\Microchip\xc8\v1.33\include\pic16f88.h
-[v _TXSTA `Vuc ~T0 @X0 0 e@152 ]
-"785
-[s S32 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S32 . RX9D OERR FERR ADDEN CREN SREN RX9 SPEN ]
-"795
-[s S33 :1 `uc 1 :5 `uc 1 :1 `uc 1 ]
-[n S33 . RCD8 . RC9 ]
-"800
-[s S34 :6 `uc 1 :1 `uc 1 ]
-[n S34 . . nRC8 ]
-"804
-[s S35 :6 `uc 1 :1 `uc 1 ]
-[n S35 . . RC8_9 ]
-"784
-[u S31 `S32 1 `S33 1 `S34 1 `S35 1 ]
-[n S31 . . . . . ]
-"809
-[v _RCSTAbits `VS31 ~T0 @X0 0 e@24 ]
-"873
-[v _TXREG `Vuc ~T0 @X0 0 e@25 ]
+"482 C:\Program Files (x86)\Microchip\xc8\v1.33\include\pic16f88.h
+[v _T1CON `Vuc ~T0 @X0 0 e@16 ]
+"470
+[v _TMR1L `Vuc ~T0 @X0 0 e@14 ]
+"476
+[v _TMR1H `Vuc ~T0 @X0 0 e@15 ]
 "382
 [s S16 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S16 . TMR1IF TMR2IF CCP1IF SSPIF TXIF RCIF ADIF ]
@@ -57,8 +13,27 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S15 . . ]
 "392
 [v _PIR1bits `VS15 ~T0 @X0 0 e@12 ]
-"75 ../Tick/Tick.h
-[v _tick_update `(v ~T0 @X0 0 ef ]
+"1183
+[s S49 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S49 . TMR1IE TMR2IE CCP1IE SSPIE TXIE RCIE ADIE ]
+"1182
+[u S48 `S49 1 ]
+[n S48 . . ]
+"1193
+[v _PIE1bits `VS48 ~T0 @X0 0 e@140 ]
+"305
+[s S13 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S13 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE PEIE GIE ]
+"315
+[s S14 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 ]
+[n S14 . . INTF . INTE ]
+"304
+[u S12 `S13 1 `S14 1 ]
+[n S12 . . . ]
+"322
+[v _INTCONbits `VS12 ~T0 @X0 0 e@11 ]
+"28 ../Tick/Tick-PIC16.c
+[v _tick_read_internal `(v ~T0 @X0 0 sf ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 24: extern void __builtin_software_breakpoint(void);
 [; ;pic16f88.h: 47: extern volatile unsigned char INDF @ 0x000;
@@ -967,90 +942,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;eeprom_routines.h: 43: extern void eecpymem(volatile unsigned char *to, __eeprom unsigned char *from, unsigned char size);
 [; ;eeprom_routines.h: 44: extern void memcpyee(__eeprom unsigned char *to, const unsigned char *from, unsigned char size);
 [; ;pic.h: 154: extern __nonreentrant void _delay(unsigned long);
-[; ;stdio.h: 8: typedef int ptrdiff_t;
-[; ;stdio.h: 9: typedef unsigned size_t;
-[; ;stdio.h: 10: typedef unsigned short wchar_t;
-[; ;stdarg.h: 7: typedef void * va_list[1];
-[; ;stdarg.h: 10: extern void * __va_start(void);
-[; ;stdarg.h: 13: extern void * __va_arg(void *, ...);
-[; ;stdio.h: 23: extern int errno;
-[; ;stdio.h: 54: struct __prbuf
-[; ;stdio.h: 55: {
-[; ;stdio.h: 56: char * ptr;
-[; ;stdio.h: 57: void (* func)(char);
-[; ;stdio.h: 58: };
-[; ;conio.h: 17: extern int errno;
-[; ;conio.h: 20: extern void init_uart(void);
-[; ;conio.h: 22: extern char getch(void);
-[; ;conio.h: 23: extern char getche(void);
-[; ;conio.h: 24: extern void putch(char);
-[; ;conio.h: 25: extern void ungetch(char);
-[; ;conio.h: 27: extern __bit kbhit(void);
-[; ;conio.h: 31: extern char * cgets(char *);
-[; ;conio.h: 32: extern void cputs(const char *);
-[; ;stdio.h: 99: extern int cprintf(char *, ...);
-[; ;stdio.h: 104: extern int _doprnt(struct __prbuf *, const register char *, register va_list);
-[; ;stdio.h: 194: extern char * gets(char *);
-[; ;stdio.h: 195: extern int puts(const char *);
-[; ;stdio.h: 196: extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
-[; ;stdio.h: 197: extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
-[; ;stdio.h: 198: extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
-[; ;stdio.h: 199: extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
-[; ;stdio.h: 200: extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
-[; ;stdio.h: 201: extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
-[; ;stdio.h: 205: extern int sprintf(char *, const char *, ...);
-[; ;stdio.h: 206: extern int printf(const char *, ...);
-[; ;stdlib.h: 27: typedef struct {
-[; ;stdlib.h: 28: int rem;
-[; ;stdlib.h: 29: int quot;
-[; ;stdlib.h: 30: } div_t;
-[; ;stdlib.h: 31: typedef struct {
-[; ;stdlib.h: 32: unsigned rem;
-[; ;stdlib.h: 33: unsigned quot;
-[; ;stdlib.h: 34: } udiv_t;
-[; ;stdlib.h: 35: typedef struct {
-[; ;stdlib.h: 36: long quot;
-[; ;stdlib.h: 37: long rem;
-[; ;stdlib.h: 38: } ldiv_t;
-[; ;stdlib.h: 39: typedef struct {
-[; ;stdlib.h: 40: unsigned long quot;
-[; ;stdlib.h: 41: unsigned long rem;
-[; ;stdlib.h: 42: } uldiv_t;
-[; ;stdlib.h: 65: extern double atof(const char *);
-[; ;stdlib.h: 66: extern double strtod(const char *, const char **);
-[; ;stdlib.h: 67: extern int atoi(const char *);
-[; ;stdlib.h: 68: extern unsigned xtoi(const char *);
-[; ;stdlib.h: 69: extern long atol(const char *);
-[; ;stdlib.h: 70: extern long strtol(const char *, char **, int);
-[; ;stdlib.h: 72: extern int rand(void);
-[; ;stdlib.h: 73: extern void srand(unsigned int);
-[; ;stdlib.h: 74: extern void * calloc(size_t, size_t);
-[; ;stdlib.h: 75: extern div_t div(int numer, int denom);
-[; ;stdlib.h: 76: extern udiv_t udiv(unsigned numer, unsigned denom);
-[; ;stdlib.h: 77: extern ldiv_t ldiv(long numer, long denom);
-[; ;stdlib.h: 78: extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
-[; ;stdlib.h: 79: extern unsigned long _lrotl(unsigned long value, unsigned int shift);
-[; ;stdlib.h: 80: extern unsigned long _lrotr(unsigned long value, unsigned int shift);
-[; ;stdlib.h: 81: extern unsigned int _rotl(unsigned int value, unsigned int shift);
-[; ;stdlib.h: 82: extern unsigned int _rotr(unsigned int value, unsigned int shift);
-[; ;stdlib.h: 87: extern void * malloc(size_t);
-[; ;stdlib.h: 88: extern void free(void *);
-[; ;stdlib.h: 89: extern void * realloc(void *, size_t);
-[; ;stdlib.h: 91: extern void abort(void);
-[; ;stdlib.h: 92: extern void exit(int);
-[; ;stdlib.h: 93: extern int atexit(void (*)(void));
-[; ;stdlib.h: 94: extern char * getenv(const char *);
-[; ;stdlib.h: 95: extern char ** environ;
-[; ;stdlib.h: 96: extern int system(char *);
-[; ;stdlib.h: 97: extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
-[; ;stdlib.h: 98: extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
-[; ;stdlib.h: 99: extern int abs(int);
-[; ;stdlib.h: 100: extern long labs(long);
-[; ;stdlib.h: 103: extern char * itoa(char * buf, int val, int base);
-[; ;stdlib.h: 104: extern char * utoa(char * buf, unsigned val, int base);
-[; ;stdlib.h: 109: extern char * ltoa(char * buf, long val, int base);
-[; ;stdlib.h: 110: extern char * ultoa(char * buf, unsigned long val, int base);
-[; ;stdlib.h: 112: extern char * ftoa(float f, int * status);
 [; ;stdint.h: 13: typedef signed char int8_t;
 [; ;stdint.h: 20: typedef signed int int16_t;
 [; ;stdint.h: 28: typedef signed short long int int24_t;
@@ -1082,213 +973,136 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Tick.h: 54: void tick_init();
 [; ;Tick.h: 66: uint32_t tick_get();
 [; ;Tick.h: 75: void tick_update();
-[; ;TimeLib.h: 43: typedef unsigned long time_t;
-[; ;TimeLib.h: 46: struct tm_t{
-[; ;TimeLib.h: 47: uint8_t tm_sec;
-[; ;TimeLib.h: 48: uint8_t tm_min;
-[; ;TimeLib.h: 49: uint8_t tm_hour;
-[; ;TimeLib.h: 50: uint8_t tm_wday;
-[; ;TimeLib.h: 51: uint8_t tm_mday;
-[; ;TimeLib.h: 52: uint8_t tm_mon;
-[; ;TimeLib.h: 53: uint8_t tm_year;
-[; ;TimeLib.h: 54: };
-[; ;TimeLib.h: 59: enum enTimeStatus {
-[; ;TimeLib.h: 60: E_TIME_NOT_SET = 0,
-[; ;TimeLib.h: 61: E_TIME_NEEDS_SYNC,
-[; ;TimeLib.h: 62: E_TIME_OK,
-[; ;TimeLib.h: 63: };
-[; ;TimeLib.h: 67: typedef time_t(* time_callback_t)();
-[; ;TimeLib.h: 85: void time_set(time_t now);
-[; ;TimeLib.h: 97: time_t time_get();
-[; ;TimeLib.h: 111: time_t time_make(struct tm_t * timeinfo);
-[; ;TimeLib.h: 122: void time_break(time_t timeinput, struct tm_t * timeinfo);
-[; ;TimeLib.h: 136: void time_set_provider(time_callback_t callback, time_t timespan);
-"20 main.c
-[p x FOSC=XT ]
-"21
-[p x WDTE=OFF ]
-"22
-[p x PWRTE=OFF ]
-"23
-[p x MCLRE=ON ]
-"24
-[p x BOREN=OFF ]
-"25
-[p x LVP=OFF ]
+"24 ../Tick/Tick-PIC16.c
+[v _tickcnt `Vul ~T0 @X0 1 s ]
+[i _tickcnt
+-> -> -> 0 `i `l `ul
+]
+[; ;Tick-PIC16.c: 24: static volatile unsigned long tickcnt = 0;
 "26
-[p x CPD=OFF ]
-"27
-[p x WRT=OFF ]
-"28
-[p x CCPMX=RB0 ]
-"29
-[p x CP=OFF ]
+[v _tickbuffer `uc ~T0 @X0 -> 6 `i s ]
+[; ;Tick-PIC16.c: 26: static unsigned char tickbuffer[6];
+[; ;Tick-PIC16.c: 28: static void tick_read_internal();
+"30
+[v _tick_init `(v ~T0 @X0 1 ef ]
 "31
-[p x FCMEN=OFF ]
-"32
-[p x IESO=OFF ]
-"35
-[v _initialt `ul ~T0 @X0 1 e ]
-[; ;main.c: 35: time_t initialt;
-[; ;main.c: 37: time_t time_provider();
-"39
-[v _main `(v ~T0 @X0 1 ef ]
-"40
 {
-[; ;main.c: 39: void main()
-[; ;main.c: 40: {
-[e :U _main ]
+[; ;Tick-PIC16.c: 30: void tick_init()
+[; ;Tick-PIC16.c: 31: {
+[e :U _tick_init ]
 [f ]
-[; ;main.c: 41: ANSEL = 0x00;
+[; ;Tick-PIC16.c: 32: T1CON = 0;
+"32
+[e = _T1CON -> -> 0 `i `uc ]
+[; ;Tick-PIC16.c: 33: TMR1L = 0;
+"33
+[e = _TMR1L -> -> 0 `i `uc ]
+[; ;Tick-PIC16.c: 34: TMR1H = 0;
+"34
+[e = _TMR1H -> -> 0 `i `uc ]
+[; ;Tick-PIC16.c: 36: PIR1bits.TMR1IF = 0;
+"36
+[e = . . _PIR1bits 0 0 -> -> 0 `i `uc ]
+[; ;Tick-PIC16.c: 37: PIE1bits.TMR1IE = 1;
+"37
+[e = . . _PIE1bits 0 0 -> -> 1 `i `uc ]
+[; ;Tick-PIC16.c: 38: INTCONbits.GIE = 1;
+"38
+[e = . . _INTCONbits 0 7 -> -> 1 `i `uc ]
+[; ;Tick-PIC16.c: 39: INTCONbits.PEIE = 1;
+"39
+[e = . . _INTCONbits 0 6 -> -> 1 `i `uc ]
+[; ;Tick-PIC16.c: 41: T1CON = 0x31;
 "41
-[e = _ANSEL -> -> 0 `i `uc ]
-[; ;main.c: 42: TRISA = 0xFF;
+[e = _T1CON -> -> 49 `i `uc ]
+[; ;Tick-PIC16.c: 42: }
 "42
-[e = _TRISA -> -> 255 `i `uc ]
-[; ;main.c: 43: TRISB = 0b00000100;
-"43
-[e = _TRISB -> -> 4 `i `uc ]
-"46
-[v _tinfo `S94 ~T0 @X0 1 a ]
-"49
-[v _now `ul ~T0 @X0 1 a ]
-"52
-[v _last `ul ~T0 @X0 1 a ]
-[; ;main.c: 46: struct tm_t tinfo;
-[; ;main.c: 49: time_t now;
-[; ;main.c: 52: uint32_t last = 0;
-[e = _last -> -> -> 0 `i `l `ul ]
-[; ;main.c: 55: tinfo.tm_year = 14;
-"55
-[e = . _tinfo 6 -> -> 14 `i `uc ]
-[; ;main.c: 56: tinfo.tm_mon = 1;
-"56
-[e = . _tinfo 5 -> -> 1 `i `uc ]
-[; ;main.c: 57: tinfo.tm_mday = 1;
-"57
-[e = . _tinfo 4 -> -> 1 `i `uc ]
-[; ;main.c: 58: tinfo.tm_hour = 13;
-"58
-[e = . _tinfo 2 -> -> 13 `i `uc ]
-[; ;main.c: 59: tinfo.tm_min = 55;
-"59
-[e = . _tinfo 1 -> -> 55 `i `uc ]
-[; ;main.c: 60: tinfo.tm_sec = 30;
-"60
-[e = . _tinfo 0 -> -> 30 `i `uc ]
-[; ;main.c: 63: tick_init();
-"63
-[e ( _tick_init ..  ]
-[; ;main.c: 65: initialt = time_make(&tinfo);
-"65
-[e = _initialt ( _time_make (1 &U _tinfo ]
-[; ;main.c: 67: time_set(initialt);
-"67
-[e ( _time_set (1 _initialt ]
-[; ;main.c: 69: time_set_provider(&time_provider, (86400UL));
-"69
-[e ( _time_set_provider (2 , &U _time_provider -> 86400 `ul ]
-[; ;main.c: 71: printf("TimeLib Test Program\r\n");
-"71
-[e ( _printf :s 1C ]
-[; ;main.c: 73: for (;;) {
-"73
+[e :UE 89 ]
+}
+"44
+[v _tick_get `(ul ~T0 @X0 1 ef ]
+"45
 {
+[; ;Tick-PIC16.c: 44: uint32_t tick_get()
+[; ;Tick-PIC16.c: 45: {
+[e :U _tick_get ]
+[f ]
+[; ;Tick-PIC16.c: 46: tick_read_internal();
+"46
+[e ( _tick_read_internal ..  ]
+[; ;Tick-PIC16.c: 47: return *((uint32_t *) & tickbuffer[0]);
+"47
+[e ) *U -> &U *U + &U _tickbuffer * -> -> -> 0 `i `ui `ux -> -> # *U &U _tickbuffer `ui `ux `*ul ]
+[e $UE 90  ]
+[; ;Tick-PIC16.c: 48: }
+"48
+[e :UE 90 ]
+}
+"50
+[v _tick_update `(v ~T0 @X0 1 ef ]
+"51
+{
+[; ;Tick-PIC16.c: 50: void tick_update()
+[; ;Tick-PIC16.c: 51: {
+[e :U _tick_update ]
+[f ]
+[; ;Tick-PIC16.c: 52: if (PIR1bits.TMR1IF) {
+"52
+[e $ ! != -> . . _PIR1bits 0 0 `i -> -> -> 0 `i `Vuc `i 92  ]
+{
+[; ;Tick-PIC16.c: 53: tickcnt++;
+"53
+[e ++ _tickcnt -> -> -> 1 `i `l `ul ]
+[; ;Tick-PIC16.c: 54: PIR1bits.TMR1IF = 0;
+"54
+[e = . . _PIR1bits 0 0 -> -> 0 `i `uc ]
+"55
+}
+[e :U 92 ]
+[; ;Tick-PIC16.c: 55: }
+[; ;Tick-PIC16.c: 56: }
+"56
+[e :UE 91 ]
+}
+"58
+[v _tick_read_internal `(v ~T0 @X0 1 sf ]
+"59
+{
+[; ;Tick-PIC16.c: 58: static void tick_read_internal()
+[; ;Tick-PIC16.c: 59: {
+[e :U _tick_read_internal ]
+[f ]
+[; ;Tick-PIC16.c: 60: do {
+"60
 [e :U 96 ]
 {
-[; ;main.c: 75: if (tick_get() - last > ((unsigned long long)((1000000 + 128ull)/8ull))) {
-"75
-[e $ ! > - ( _tick_get ..  _last / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul 99  ]
-{
-[; ;main.c: 77: last = tick_get();
-"77
-[e = _last ( _tick_get ..  ]
-[; ;main.c: 79: now = time_get();
-"79
-[e = _now ( _time_get ..  ]
-[; ;main.c: 81: time_break(now, &tinfo);
-"81
-[e ( _time_break (2 , _now &U _tinfo ]
-[; ;main.c: 83: printf("Time: %02d:%02d:%02d Date: %02d/%02d/%02d\r\n", tinfo.tm_hour, tinfo.tm_min, tinfo.tm_sec, tinfo.tm_mday, tinfo.tm_mon, tinfo.tm_year);
-"83
-[e ( _printf , , , , , , (. :s 2C -> . _tinfo 2 `i -> . _tinfo 1 `i -> . _tinfo 0 `i -> . _tinfo 4 `i -> . _tinfo 5 `i -> . _tinfo 6 `i ]
-"84
+[; ;Tick-PIC16.c: 61: PIE1bits.TMR1IE = 1;
+"61
+[e = . . _PIE1bits 0 0 -> -> 1 `i `uc ]
+[; ;Tick-PIC16.c: 62: asm("nop");
+"62
+[; <" nop ;# ">
+[; ;Tick-PIC16.c: 63: PIE1bits.TMR1IE = 0;
+"63
+[e = . . _PIE1bits 0 0 -> -> 0 `i `uc ]
+[; ;Tick-PIC16.c: 65: tickbuffer[0] = TMR1L;
+"65
+[e = *U + &U _tickbuffer * -> -> -> 0 `i `ui `ux -> -> # *U &U _tickbuffer `ui `ux _TMR1L ]
+[; ;Tick-PIC16.c: 66: tickbuffer[1] = TMR1H;
+"66
+[e = *U + &U _tickbuffer * -> -> -> 1 `i `ui `ux -> -> # *U &U _tickbuffer `ui `ux _TMR1H ]
+[; ;Tick-PIC16.c: 68: *((uint32_t*) & tickbuffer[2]) = tickcnt;
+"68
+[e = *U -> &U *U + &U _tickbuffer * -> -> -> 2 `i `ui `ux -> -> # *U &U _tickbuffer `ui `ux `*ul _tickcnt ]
+"69
 }
-[e :U 99 ]
-"85
+[; ;Tick-PIC16.c: 69: } while (PIR1bits.TMR1IF);
+[e $ != -> . . _PIR1bits 0 0 `i -> -> -> 0 `i `Vuc `i 96  ]
+[e :U 95 ]
+[; ;Tick-PIC16.c: 70: PIE1bits.TMR1IE = 1;
+"70
+[e = . . _PIE1bits 0 0 -> -> 1 `i `uc ]
+[; ;Tick-PIC16.c: 71: }
+"71
+[e :UE 93 ]
 }
-[; ;main.c: 84: }
-[; ;main.c: 85: }
-[e $U 96  ]
-[e :U 97 ]
-}
-[; ;main.c: 87: }
-"87
-[e :UE 95 ]
-}
-"89
-[v _time_provider `(ul ~T0 @X0 1 ef ]
-"90
-{
-[; ;main.c: 89: time_t time_provider()
-[; ;main.c: 90: {
-[e :U _time_provider ]
-[f ]
-[; ;main.c: 95: return initialt;
-"95
-[e ) _initialt ]
-[e $UE 100  ]
-[; ;main.c: 96: }
-"96
-[e :UE 100 ]
-}
-"103
-[v _putch `(v ~T0 @X0 1 ef1`uc ]
-"104
-{
-[; ;main.c: 103: void putch(unsigned char data)
-[; ;main.c: 104: {
-[e :U _putch ]
-"103
-[v _data `uc ~T0 @X0 1 r1 ]
-"104
-[f ]
-[; ;main.c: 105: TXSTA=0x26;
-"105
-[e = _TXSTA -> -> 38 `i `uc ]
-[; ;main.c: 106: RCSTAbits.SPEN=1;
-"106
-[e = . . _RCSTAbits 0 7 -> -> 1 `i `uc ]
-[; ;main.c: 108: TXREG = data;
-"108
-[e = _TXREG _data ]
-[; ;main.c: 109: while( !( PIR1bits.TXIF ) );
-"109
-[e $U 102  ]
-[e :U 103 ]
-[e :U 102 ]
-[e $ ! != -> . . _PIR1bits 0 4 `i -> -> -> 0 `i `Vuc `i 103  ]
-[e :U 104 ]
-[; ;main.c: 110: }
-"110
-[e :UE 101 ]
-}
-[v F1229 `(v ~T0 @X0 1 tf ]
-"116
-[v _isr `IF1229 ~T0 @X0 1 e ]
-"117
-{
-[; ;main.c: 116: void interrupt isr(void)
-[; ;main.c: 117: {
-[e :U _isr ]
-[f ]
-[; ;main.c: 119: tick_update();
-"119
-[e ( _tick_update ..  ]
-[; ;main.c: 121: }
-"121
-[e :UE 105 ]
-}
-[p f _printf 8421508 ]
-[a 1C 84 105 109 101 76 105 98 32 84 101 115 116 32 80 114 111 103 114 97 109 13 10 0 ]
-[a 2C 84 105 109 101 58 32 37 48 50 100 58 37 48 50 100 58 37 48 50 100 32 68 97 116 101 58 32 37 48 50 100 47 37 48 50 100 47 37 48 50 100 13 10 0 ]

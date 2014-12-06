@@ -1,5 +1,5 @@
 
-# 1 "main.c"
+# 1 "../Tick/Tick-PIC16.c"
 
 # 21 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -1271,142 +1271,6 @@ extern void memcpyee(__eeprom unsigned char *to, const unsigned char *from, unsi
 #pragma intrinsic(_delay)
 extern __nonreentrant void _delay(unsigned long);
 
-# 8 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdio.h"
-typedef int ptrdiff_t;
-typedef unsigned size_t;
-typedef unsigned short wchar_t;
-
-# 7 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdarg.h"
-typedef void * va_list[1];
-
-#pragma intrinsic(__va_start)
-extern void * __va_start(void);
-
-#pragma intrinsic(__va_arg)
-extern void * __va_arg(void *, ...);
-
-# 23 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdio.h"
-extern int errno;
-
-# 54
-struct __prbuf
-{
-char * ptr;
-void (* func)(char);
-};
-
-# 17 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\conio.h"
-extern int errno;
-
-
-extern void init_uart(void);
-
-extern char getch(void);
-extern char getche(void);
-extern void putch(char);
-extern void ungetch(char);
-
-extern __bit kbhit(void);
-
-# 31
-extern char * cgets(char *);
-extern void cputs(const char *);
-
-# 99 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdio.h"
-extern int cprintf(char *, ...);
-#pragma printf_check(cprintf)
-
-
-
-extern int _doprnt(struct __prbuf *, const register char *, register va_list);
-
-
-# 191
-#pragma printf_check(vprintf) const
-#pragma printf_check(vsprintf) const
-
-extern char * gets(char *);
-extern int puts(const char *);
-extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
-extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
-extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
-extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
-extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
-extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
-
-#pragma printf_check(printf) const
-#pragma printf_check(sprintf) const
-extern int sprintf(char *, const char *, ...);
-extern int printf(const char *, ...);
-
-# 27 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdlib.h"
-typedef struct {
-int rem;
-int quot;
-} div_t;
-typedef struct {
-unsigned rem;
-unsigned quot;
-} udiv_t;
-typedef struct {
-long quot;
-long rem;
-} ldiv_t;
-typedef struct {
-unsigned long quot;
-unsigned long rem;
-} uldiv_t;
-
-# 65
-extern double atof(const char *);
-extern double strtod(const char *, const char **);
-extern int atoi(const char *);
-extern unsigned xtoi(const char *);
-extern long atol(const char *);
-extern long strtol(const char *, char **, int);
-
-extern int rand(void);
-extern void srand(unsigned int);
-extern void * calloc(size_t, size_t);
-extern div_t div(int numer, int denom);
-extern udiv_t udiv(unsigned numer, unsigned denom);
-extern ldiv_t ldiv(long numer, long denom);
-extern uldiv_t uldiv(unsigned long numer,unsigned long denom);
-extern unsigned long _lrotl(unsigned long value, unsigned int shift);
-extern unsigned long _lrotr(unsigned long value, unsigned int shift);
-extern unsigned int _rotl(unsigned int value, unsigned int shift);
-extern unsigned int _rotr(unsigned int value, unsigned int shift);
-
-
-
-
-extern void * malloc(size_t);
-extern void free(void *);
-extern void * realloc(void *, size_t);
-
-extern void abort(void);
-extern void exit(int);
-extern int atexit(void (*)(void));
-extern char * getenv(const char *);
-extern char ** environ;
-extern int system(char *);
-extern void qsort(void *, size_t, size_t, int (*)(const void *, const void *));
-extern void * bsearch(const void *, void *, size_t, size_t, int(*)(const void *, const void *));
-extern int abs(int);
-extern long labs(long);
-
-
-extern char * itoa(char * buf, int val, int base);
-extern char * utoa(char * buf, unsigned val, int base);
-
-
-
-
-extern char * ltoa(char * buf, long val, int base);
-extern char * ultoa(char * buf, unsigned long val, int base);
-
-extern char * ftoa(float f, int * status);
-
 # 13 "C:\Program Files (x86)\Microchip\xc8\v1.33\include\stdint.h"
 typedef signed char int8_t;
 
@@ -1506,137 +1370,52 @@ uint32_t tick_get();
 # 75
 void tick_update();
 
-# 43 "../TimeLib.h"
-typedef unsigned long time_t;
+# 24 "../Tick/Tick-PIC16.c"
+static volatile unsigned long tickcnt = 0;
 
+static unsigned char tickbuffer[6];
 
-struct tm_t{
-uint8_t tm_sec;
-uint8_t tm_min;
-uint8_t tm_hour;
-uint8_t tm_wday;
-uint8_t tm_mday;
-uint8_t tm_mon;
-uint8_t tm_year;
-};
+static void tick_read_internal();
 
-# 59
-enum enTimeStatus {
-E_TIME_NOT_SET = 0,
-E_TIME_NEEDS_SYNC,
-E_TIME_OK,
-};
-
-# 67
-typedef time_t(* time_callback_t)();
-
-# 85
-void time_set(time_t now);
-
-# 97
-time_t time_get();
-
-# 111
-time_t time_make(struct tm_t * timeinfo);
-
-# 122
-void time_break(time_t timeinput, struct tm_t * timeinfo);
-
-# 136
-void time_set_provider(time_callback_t callback, time_t timespan);
-
-
-# 20 "main.c"
-#pragma config FOSC = XT
-#pragma config WDTE = OFF
-#pragma config PWRTE = OFF
-#pragma config MCLRE = ON
-#pragma config BOREN = OFF
-#pragma config LVP = OFF
-#pragma config CPD = OFF
-#pragma config WRT = OFF
-#pragma config CCPMX = RB0
-#pragma config CP = OFF
-
-#pragma config FCMEN = OFF
-#pragma config IESO = OFF
-
-
-time_t initialt;
-
-time_t time_provider();
-
-void main()
+void tick_init()
 {
-ANSEL = 0x00;
-TRISA = 0xFF;
-TRISB = 0b00000100;
+T1CON = 0;
+TMR1L = 0;
+TMR1H = 0;
 
+PIR1bits.TMR1IF = 0;
+PIE1bits.TMR1IE = 1;
+INTCONbits.GIE = 1;
+INTCONbits.PEIE = 1;
 
-struct tm_t tinfo;
-
-
-time_t now;
-
-
-uint32_t last = 0;
-
-
-tinfo.tm_year = 14;
-tinfo.tm_mon = 1;
-tinfo.tm_mday = 1;
-tinfo.tm_hour = 13;
-tinfo.tm_min = 55;
-tinfo.tm_sec = 30;
-
-
-tick_init();
-
-initialt = time_make(&tinfo);
-
-time_set(initialt);
-
-time_set_provider(&time_provider, (86400UL));
-
-printf("TimeLib Test Program\r\n");
-
-for (;;) {
-
-if (tick_get() - last > ((unsigned long long)((1000000 + 128ull)/8ull))) {
-
-last = tick_get();
-
-now = time_get();
-
-time_break(now, &tinfo);
-
-printf("Time: %02d:%02d:%02d Date: %02d/%02d/%02d\r\n", tinfo.tm_hour, tinfo.tm_min, tinfo.tm_sec, tinfo.tm_mday, tinfo.tm_mon, tinfo.tm_year);
-}
+T1CON = 0x31;
 }
 
-}
-
-time_t time_provider()
+uint32_t tick_get()
 {
-
-# 95
-return initialt;
+tick_read_internal();
+return *((uint32_t *) & tickbuffer[0]);
 }
 
-# 103
-void putch(unsigned char data)
+void tick_update()
 {
-TXSTA=0x26;
-RCSTAbits.SPEN=1;
-
-TXREG = data;
-while( !( PIR1bits.TXIF ) );
+if (PIR1bits.TMR1IF) {
+tickcnt++;
+PIR1bits.TMR1IF = 0;
+}
 }
 
-# 116
-void interrupt isr(void)
+static void tick_read_internal()
 {
+do {
+PIE1bits.TMR1IE = 1;
+asm("nop");
+PIE1bits.TMR1IE = 0;
 
-tick_update();
+tickbuffer[0] = TMR1L;
+tickbuffer[1] = TMR1H;
 
+*((uint32_t*) & tickbuffer[2]) = tickcnt;
+} while (PIR1bits.TMR1IF);
+PIE1bits.TMR1IE = 1;
 }

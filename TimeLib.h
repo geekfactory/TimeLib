@@ -39,18 +39,21 @@
 /*		Typedefs enums & structs			*/
 /*-------------------------------------------------------------*/
 
-#if !defined(__time_t_defined) // avoid conflict with newlib or other posix libc
+#if !defined(__time_t_defined) // avoid conflict with other libs
 typedef unsigned long time_t;
 #endif
 
-struct tm_t{
-uint8_t tm_sec;
-uint8_t tm_min;
-uint8_t tm_hour;
-uint8_t tm_wday; // day of week, sunday is day 1
-uint8_t tm_mday;
-uint8_t tm_mon;
-uint8_t tm_year; // offset from 1970;
+/**
+ * Simplified structure to store human readable components of time /date
+ */
+struct tm_t {
+    uint8_t tm_sec;
+    uint8_t tm_min;
+    uint8_t tm_hour;
+    uint8_t tm_wday; // day of week, sunday is day 1
+    uint8_t tm_mday;
+    uint8_t tm_mon;
+    uint8_t tm_year; // offset from 1970;
 };
 
 /**
@@ -61,77 +64,85 @@ enum enTimeStatus {
     E_TIME_NEEDS_SYNC, //!< Time was set, but needs to be synced with timebase
     E_TIME_OK, //!< Time is valid and in sync with time source
 };
+
 /**
- * @brief Type for funtion pointer that gets the precise time from a timebase
+ * @brief Type for funtion pointer that gets the precise time from externa source
+ * or device.
  */
 typedef time_t(* time_callback_t)();
 
 /*-------------------------------------------------------------*/
 /*		Function prototypes				*/
 /*-------------------------------------------------------------*/
+#ifdef	__cplusplus
+extern "C" {
+#endif
+    /**
+     * @brief Sets the current system time
+     *
+     * This function sets the time keeping system variable to the given value.
+     * The time is stored and mantained as an integral value representing the number
+     * of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix timestamp).
+     *
+     * @param now Unix timestamp representing the number of seconds elapsed since
+     * 00:00 hours, Jan 1, 1970 UTC to the present date.
+     */
+    void time_set(time_t now);
 
-/**
- * @brief Sets the current system time
- *
- * This function sets the time keeping system variable to the given value.
- * The time is stored and mantained as an integral value representing the number
- * of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix timestamp).
- *
- * @param now Unix timestamp representing the number of seconds elapsed since
- * 00:00 hours, Jan 1, 1970 UTC to the present date.
- */
-void time_set(time_t now);
+    /**
+     * @brief Gets the current system time
+     *
+     * This function reads the value of the time keeping system variable.
+     * The time is stored and mantained as an integral value representing the number
+     * of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix timestamp).
+     *
+     * @return A Unix timestamp representing the number of seconds elapsed since
+     * 00:00 hours, Jan 1, 1970 UTC to the present date.
+     */
+    time_t time_get();
 
-/**
- * @brief Gets the current system time
- *
- * This function reads the value of the time keeping system variable.
- * The time is stored and mantained as an integral value representing the number
- * of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix timestamp).
- *
- * @return A Unix timestamp representing the number of seconds elapsed since
- * 00:00 hours, Jan 1, 1970 UTC to the present date.
- */
-time_t time_get();
+    /**
+     * @brief Generates a Unix Timestamp from the given time/date components
+     *
+     * This function generates the corresponding Unix timestamp for the provided
+     * date and time information. The timestamp is an integral value representing
+     * the number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+     *
+     * @param timeinfo A structure containing the human readable elements of the
+     * date and time to convert to a UNIX timestamp.
+     *
+     * @return The UNIX Timestamp for the given time/date components
+     */
+    time_t time_make(struct tm_t * timeinfo);
 
-/**
- * @brief Generates a Unix Timestamp from the given time/date components
- *
- * This function generates the corresponding Unix timestamp for the provided
- * date and time information. The timestamp is an integral value representing
- * the number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
- *
- * @param timeinfo A structure containing the human readable elements of the
- * date and time to convert to a UNIX timestamp.
- *
- * @return The UNIX Timestamp for the given time/date components
- */
-time_t time_make(struct tm_t * timeinfo);
+    /**
+     * @brief Get human readable time from Unix time
+     *
+     * This function performs the conversion from Unix timestamp to human readable
+     * time components and places the information on a standard time structure.
+     *
+     * @param timeinput The timestamp to convert
+     * @param timeinfo Pointer to tm structure to strore the resuling time
+     */
+    void time_break(time_t timeinput, struct tm_t * timeinfo);
 
-/**
- * @brief Get human readable time from Unix time
- *
- * This function performs the conversion from Unix timestamp to human readable
- * time components and places the information on a standard time structure.
- *
- * @param timeinput The timestamp to convert
- * @param timeinfo Pointer to tm structure to strore the resuling time
- */
-void time_break(time_t timeinput, struct tm_t * timeinfo);
+    /**
+     * @brief Sets the callback function that obtains precise time
+     *
+     * This function sets a callback that runs to keep internal CPU time in sync
+     * with an accurate time reference. This function also sets the time interval
+     * for time synchronization.
+     *
+     * @param callback The callback to get precise time information, this callback
+     * should return a timestamp.
+     *
+     * @param timespan The interval in seconds when this function should be called
+     */
+    void time_set_provider(time_callback_t callback, time_t timespan);
 
-/**
- * @brief Sets the callback function that obtains precise time
- *
- * This function sets a callback that runs to keep internal CPU time in sync
- * with an accurate time reference. This function also sets the time interval
- * for time synchronization.
- *
- * @param callback The callback to get precise time information, this callback
- * should return a timestamp.
- *
- * @param timespan The interval in seconds when this function should be called
- */
-void time_set_provider(time_callback_t callback, time_t timespan);
+#ifdef	__cplusplus
+}
+#endif
 
 #define time_prev_midnight(_xTime_) (uint32_t)(( (uint32_t)_xTime_ / (uint32_t)TIME_SECS_PER_DAY) * (uint32_t)TIME_SECS_PER_DAY)
 #define time_dow(_xTime_)  (( _xTime_ / TIME_SECS_PER_DAY + 4)  % TIME_DAYS_PER_WEEK) // 0 = Sunday

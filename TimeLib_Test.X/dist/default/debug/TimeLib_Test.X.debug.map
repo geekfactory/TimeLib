@@ -3,10 +3,10 @@ Microchip MPLAB XC8 Compiler V1.33 ()
 Linker command line:
 
 --edf=C:\Program Files (x86)\Microchip\xc8\v1.33\dat\en_msgs.txt -cs \
-  -h+dist/default/production\TimeLib_Test.X.production.sym \
-  --cmf=dist/default/production\TimeLib_Test.X.production.cmf -z -Q16F88 \
-  -oC:\Users\Ruben\AppData\Local\Temp\s3fk.6 \
-  -Mdist/default/production/TimeLib_Test.X.production.map -E1 -ver=XC8 \
+  -h+dist/default/debug\TimeLib_Test.X.debug.sym \
+  --cmf=dist/default/debug\TimeLib_Test.X.debug.cmf -z -Q16F88 \
+  -oC:\Users\Ruben\AppData\Local\Temp\s530.6 \
+  -Mdist/default/debug/TimeLib_Test.X.debug.map -E1 -ver=XC8 \
   -ASTACK=0110h-016fh -pstack=STACK -ACONST=00h-0FFhx16 -ACODE=00h-07FFhx2 \
   -ASTRCODE=00h-0FFFh -AENTRY=00h-0FFhx16 -ASTRING=00h-0FFhx16 \
   -ACOMMON=070h-07Fh -ABANK0=020h-06Fh -ABANK1=0A0h-0EFh \
@@ -18,8 +18,8 @@ Linker command line:
   -pfunctab=CODE -ACONFIG=02007h-02008h -pconfig=CONFIG -DCONFIG=2 \
   -AIDLOC=02000h-02003h -pidloc=IDLOC -DIDLOC=2 -AEEDATA=00h-0FFh/02100h \
   -peeprom_data=EEDATA -DEEDATA=2 -DCODE=2 -DSTRCODE=2 -DSTRING=2 -DCONST=2 \
-  -DENTRY=2 -k C:\Users\Ruben\AppData\Local\Temp\s3fk.obj \
-  dist/default/production\TimeLib_Test.X.production.obj 
+  -DENTRY=2 -k C:\Users\Ruben\AppData\Local\Temp\s530.obj \
+  dist/default/debug\TimeLib_Test.X.debug.obj 
 
 Object code version is 3.11
 
@@ -28,11 +28,11 @@ Machine type is 16F88
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\Ruben\AppData\Local\Temp\s3fk.obj
+C:\Users\Ruben\AppData\Local\Temp\s530.obj
                 end_init                             11       11        2        8       0
                 reset_vec                             0        0        2        0       0
                 config                             2007     2007        2     400E       0
-dist/default/production\TimeLib_Test.X.production.obj
+dist/default/debug\TimeLib_Test.X.debug.obj
                 cinit                                13       13       21        8       0
                 functab                             100      100        8        2       0
                 intentry                              4        4        D        8       0
