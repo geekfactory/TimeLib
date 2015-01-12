@@ -1370,11 +1370,11 @@ uint32_t tick_get();
 # 75
 void tick_update();
 
-# 43 "../TimeLib.h"
+# 44 "../TimeLib.h"
 typedef unsigned long time_t;
 
-
-struct tm_t{
+# 53
+struct tm_t {
 uint8_t tm_sec;
 uint8_t tm_min;
 uint8_t tm_hour;
@@ -1384,30 +1384,51 @@ uint8_t tm_mon;
 uint8_t tm_year;
 };
 
-# 59
-enum enTimeStatus {
+# 66
+enum time_status {
 E_TIME_NOT_SET = 0,
 E_TIME_NEEDS_SYNC,
 E_TIME_OK,
 };
 
-# 67
+# 79
 typedef time_t(* time_callback_t)();
 
-# 85
+# 98
 void time_set(time_t now);
 
-# 97
+# 111
 time_t time_get();
 
-# 111
+# 120
+uint8_t time_second_t(time_t time);
+
+# 129
+uint8_t time_minute_t(time_t time);
+
+# 138
+uint8_t time_hour_t(time_t time);
+
+# 145
+uint8_t time_second();
+
+# 152
+uint8_t time_minute();
+
+# 159
+uint8_t time_hour();
+
+# 173
 time_t time_make(struct tm_t * timeinfo);
 
-# 122
+# 184
 void time_break(time_t timeinput, struct tm_t * timeinfo);
 
-# 136
+# 198
 void time_set_provider(time_callback_t callback, time_t timespan);
+
+# 210
+uint8_t time_get_status();
 
 # 23 "../TimeLib.c"
 const unsigned char month_length[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -1421,28 +1442,40 @@ time_t sync_interval = 86400;
 
 time_t sync_next = 0;
 
-# 37
+
+time_t tcache;
+struct tm_t telements;
+
+# 41
 unsigned long last_update = 0;
 
 
-enum enTimeStatus enTimeCurrentStatus = E_TIME_NOT_SET;
+enum time_status tstatus = E_TIME_NOT_SET;
 
-# 47
+# 51
 time_callback_t time_provider_callback = 0;
 
-# 56
+# 60
 static int time_is_leap(unsigned int year)
 {
 
 return((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
 }
 
-# 66
+static void time_update(time_t time)
+{
+if (tcache != time) {
+tcache = time;
+time_break(time, &telements);
+}
+}
+
+# 78
 void time_set(time_t now)
 {
 sys_time = now;
 sync_next = now + sync_interval;
-enTimeCurrentStatus = E_TIME_OK;
+tstatus = E_TIME_OK;
 last_update = tick_get();
 }
 
@@ -1461,7 +1494,7 @@ if (now != 0)
 time_set(now);
 else {
 sync_next = sys_time + sync_interval;
-enTimeCurrentStatus = (enTimeCurrentStatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
+tstatus = (tstatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
 }
 }
 }
@@ -1475,6 +1508,83 @@ last_update += ((unsigned long long)((1000000 + 128ull)/8ull));
 }
 
 return sys_time;
+}
+
+uint8_t time_second_t(time_t time)
+{
+time_update(time);
+return telements.tm_sec;
+}
+
+uint8_t time_minute_t(time_t time)
+{
+time_update(time);
+return telements.tm_min;
+}
+
+uint8_t time_hour_t(time_t time)
+{
+time_update(time);
+return telements.tm_hour;
+}
+
+uint8_t time_wday_t(time_t time)
+{
+time_update(time);
+return telements.tm_wday;
+}
+
+uint8_t time_day_t(time_t time)
+{
+time_update(time);
+return telements.tm_mday;
+}
+
+uint8_t time_month_t(time_t time)
+{
+time_update(time);
+return telements.tm_mon;
+}
+
+uint16_t time_year_t(time_t time)
+{
+time_update(time);
+return telements.tm_mon;
+}
+
+uint8_t time_second()
+{
+return time_second_t(time_get());
+}
+
+uint8_t time_minute()
+{
+return time_minute_t(time_get());
+}
+
+uint8_t time_hour()
+{
+return time_hour_t(time_get());
+}
+
+uint8_t time_wday()
+{
+return time_wday_t(time_get());
+}
+
+uint8_t time_day()
+{
+return time_day_t(time_get());
+}
+
+uint8_t time_month()
+{
+return time_month_t(time_get());
+}
+
+uint16_t time_year()
+{
+return time_year_t(time_get());
 }
 
 time_t time_make(struct tm_t * timeinfo)
@@ -1574,4 +1684,10 @@ sync_interval = (timespan == 0) ? (86400UL) : timespan;
 sync_next = sys_time;
 
 time_get();
+}
+
+uint8_t time_get_status()
+{
+time_get();
+return tstatus;
 }

@@ -6,17 +6,17 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TRISA `Vuc ~T0 @X0 0 e@133 ]
 "1116
 [v _TRISB `Vuc ~T0 @X0 0 e@134 ]
-"46 ../TimeLib.h
+"53 ../TimeLib.h
 [s S94 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
 [n S94 tm_t tm_sec tm_min tm_hour tm_wday tm_mday tm_mon tm_year ]
 "54 ../Tick/Tick.h
 [v _tick_init `(v ~T0 @X0 0 ef ]
-"111 ../TimeLib.h
+"173 ../TimeLib.h
 [v _time_make `(ul ~T0 @X0 0 ef1`*S94 ]
-"85
+"98
 [v _time_set `(v ~T0 @X0 0 ef1`ul ]
 [v F1206 `(ul ~T0 @X0 0 tf ]
-"136
+"198
 [v _time_set_provider `(v ~T0 @X0 0 ef2`*F1206`ul ]
 "37 main.c
 [v _time_provider `(ul ~T0 @X0 0 ef ]
@@ -24,9 +24,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _printf `(i ~T0 @X0 0 ev`*Cuc ]
 "66 ../Tick/Tick.h
 [v _tick_get `(ul ~T0 @X0 0 ef ]
-"97 ../TimeLib.h
+"152 ../TimeLib.h
+[v _time_minute `(uc ~T0 @X0 0 ef ]
+"111
 [v _time_get `(ul ~T0 @X0 0 ef ]
-"122
+"184
 [v _time_break `(v ~T0 @X0 0 ef2`ul`*S94 ]
 "1605 C:\Program Files (x86)\Microchip\xc8\v1.33\include\pic16f88.h
 [v _TXSTA `Vuc ~T0 @X0 0 e@152 ]
@@ -1082,27 +1084,34 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Tick.h: 54: void tick_init();
 [; ;Tick.h: 66: uint32_t tick_get();
 [; ;Tick.h: 75: void tick_update();
-[; ;TimeLib.h: 43: typedef unsigned long time_t;
-[; ;TimeLib.h: 46: struct tm_t{
-[; ;TimeLib.h: 47: uint8_t tm_sec;
-[; ;TimeLib.h: 48: uint8_t tm_min;
-[; ;TimeLib.h: 49: uint8_t tm_hour;
-[; ;TimeLib.h: 50: uint8_t tm_wday;
-[; ;TimeLib.h: 51: uint8_t tm_mday;
-[; ;TimeLib.h: 52: uint8_t tm_mon;
-[; ;TimeLib.h: 53: uint8_t tm_year;
-[; ;TimeLib.h: 54: };
-[; ;TimeLib.h: 59: enum enTimeStatus {
-[; ;TimeLib.h: 60: E_TIME_NOT_SET = 0,
-[; ;TimeLib.h: 61: E_TIME_NEEDS_SYNC,
-[; ;TimeLib.h: 62: E_TIME_OK,
-[; ;TimeLib.h: 63: };
-[; ;TimeLib.h: 67: typedef time_t(* time_callback_t)();
-[; ;TimeLib.h: 85: void time_set(time_t now);
-[; ;TimeLib.h: 97: time_t time_get();
-[; ;TimeLib.h: 111: time_t time_make(struct tm_t * timeinfo);
-[; ;TimeLib.h: 122: void time_break(time_t timeinput, struct tm_t * timeinfo);
-[; ;TimeLib.h: 136: void time_set_provider(time_callback_t callback, time_t timespan);
+[; ;TimeLib.h: 44: typedef unsigned long time_t;
+[; ;TimeLib.h: 53: struct tm_t {
+[; ;TimeLib.h: 54: uint8_t tm_sec;
+[; ;TimeLib.h: 55: uint8_t tm_min;
+[; ;TimeLib.h: 56: uint8_t tm_hour;
+[; ;TimeLib.h: 57: uint8_t tm_wday;
+[; ;TimeLib.h: 58: uint8_t tm_mday;
+[; ;TimeLib.h: 59: uint8_t tm_mon;
+[; ;TimeLib.h: 60: uint8_t tm_year;
+[; ;TimeLib.h: 61: };
+[; ;TimeLib.h: 66: enum time_status {
+[; ;TimeLib.h: 67: E_TIME_NOT_SET = 0,
+[; ;TimeLib.h: 68: E_TIME_NEEDS_SYNC,
+[; ;TimeLib.h: 69: E_TIME_OK,
+[; ;TimeLib.h: 70: };
+[; ;TimeLib.h: 79: typedef time_t(* time_callback_t)();
+[; ;TimeLib.h: 98: void time_set(time_t now);
+[; ;TimeLib.h: 111: time_t time_get();
+[; ;TimeLib.h: 120: uint8_t time_second_t(time_t time);
+[; ;TimeLib.h: 129: uint8_t time_minute_t(time_t time);
+[; ;TimeLib.h: 138: uint8_t time_hour_t(time_t time);
+[; ;TimeLib.h: 145: uint8_t time_second();
+[; ;TimeLib.h: 152: uint8_t time_minute();
+[; ;TimeLib.h: 159: uint8_t time_hour();
+[; ;TimeLib.h: 173: time_t time_make(struct tm_t * timeinfo);
+[; ;TimeLib.h: 184: void time_break(time_t timeinput, struct tm_t * timeinfo);
+[; ;TimeLib.h: 198: void time_set_provider(time_callback_t callback, time_t timespan);
+[; ;TimeLib.h: 210: uint8_t time_get_status();
 "20 main.c
 [p x FOSC=XT ]
 "21
@@ -1200,6 +1209,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "75
 [e $ ! > - ( _tick_get ..  _last / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul 99  ]
 {
+[; ;main.c: 76: time_minute();
+"76
+[e ( _time_minute ..  ]
 [; ;main.c: 77: last = tick_get();
 "77
 [e = _last ( _tick_get ..  ]
@@ -1253,16 +1265,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _data `uc ~T0 @X0 1 r1 ]
 "104
 [f ]
-[; ;main.c: 105: TXSTA=0x26;
+[; ;main.c: 105: TXSTA = 0x26;
 "105
 [e = _TXSTA -> -> 38 `i `uc ]
-[; ;main.c: 106: RCSTAbits.SPEN=1;
+[; ;main.c: 106: RCSTAbits.SPEN = 1;
 "106
 [e = . . _RCSTAbits 0 7 -> -> 1 `i `uc ]
 [; ;main.c: 108: TXREG = data;
 "108
 [e = _TXREG _data ]
-[; ;main.c: 109: while( !( PIR1bits.TXIF ) );
+[; ;main.c: 109: while (!(PIR1bits.TXIF));
 "109
 [e $U 102  ]
 [e :U 103 ]
@@ -1273,9 +1285,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "110
 [e :UE 101 ]
 }
-[v F1229 `(v ~T0 @X0 1 tf ]
+[v F1239 `(v ~T0 @X0 1 tf ]
 "116
-[v _isr `IF1229 ~T0 @X0 1 e ]
+[v _isr `IF1239 ~T0 @X0 1 e ]
 "117
 {
 [; ;main.c: 116: void interrupt isr(void)

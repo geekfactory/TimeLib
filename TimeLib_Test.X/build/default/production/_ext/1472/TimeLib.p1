@@ -1,13 +1,15 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"40 ../TimeLib.c
-[c E1015 0 1 2 .. ]
-[n E1015 enTimeStatus E_TIME_NOT_SET E_TIME_NEEDS_SYNC E_TIME_OK  ]
-[v F1020 `(ul ~T0 @X0 0 tf ]
-"66 ../Tick/Tick.h
-[v _tick_get `(ul ~T0 @X0 0 ef ]
-"46 ../TimeLib.h
+"53 ../TimeLib.h
 [s S89 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
 [n S89 tm_t tm_sec tm_min tm_hour tm_wday tm_mday tm_mon tm_year ]
+"44 ../TimeLib.c
+[c E1015 0 1 2 .. ]
+[n E1015 time_status E_TIME_NOT_SET E_TIME_NEEDS_SYNC E_TIME_OK  ]
+[v F1020 `(ul ~T0 @X0 0 tf ]
+"184 ../TimeLib.h
+[v _time_break `(v ~T0 @X0 0 ef2`ul`*S89 ]
+"66 ../Tick/Tick.h
+[v _tick_get `(ul ~T0 @X0 0 ef ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 24: extern void __builtin_software_breakpoint(void);
 [; ;pic16f88.h: 47: extern volatile unsigned char INDF @ 0x000;
@@ -947,27 +949,34 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Tick.h: 54: void tick_init();
 [; ;Tick.h: 66: uint32_t tick_get();
 [; ;Tick.h: 75: void tick_update();
-[; ;TimeLib.h: 43: typedef unsigned long time_t;
-[; ;TimeLib.h: 46: struct tm_t{
-[; ;TimeLib.h: 47: uint8_t tm_sec;
-[; ;TimeLib.h: 48: uint8_t tm_min;
-[; ;TimeLib.h: 49: uint8_t tm_hour;
-[; ;TimeLib.h: 50: uint8_t tm_wday;
-[; ;TimeLib.h: 51: uint8_t tm_mday;
-[; ;TimeLib.h: 52: uint8_t tm_mon;
-[; ;TimeLib.h: 53: uint8_t tm_year;
-[; ;TimeLib.h: 54: };
-[; ;TimeLib.h: 59: enum enTimeStatus {
-[; ;TimeLib.h: 60: E_TIME_NOT_SET = 0,
-[; ;TimeLib.h: 61: E_TIME_NEEDS_SYNC,
-[; ;TimeLib.h: 62: E_TIME_OK,
-[; ;TimeLib.h: 63: };
-[; ;TimeLib.h: 67: typedef time_t(* time_callback_t)();
-[; ;TimeLib.h: 85: void time_set(time_t now);
-[; ;TimeLib.h: 97: time_t time_get();
-[; ;TimeLib.h: 111: time_t time_make(struct tm_t * timeinfo);
-[; ;TimeLib.h: 122: void time_break(time_t timeinput, struct tm_t * timeinfo);
-[; ;TimeLib.h: 136: void time_set_provider(time_callback_t callback, time_t timespan);
+[; ;TimeLib.h: 44: typedef unsigned long time_t;
+[; ;TimeLib.h: 53: struct tm_t {
+[; ;TimeLib.h: 54: uint8_t tm_sec;
+[; ;TimeLib.h: 55: uint8_t tm_min;
+[; ;TimeLib.h: 56: uint8_t tm_hour;
+[; ;TimeLib.h: 57: uint8_t tm_wday;
+[; ;TimeLib.h: 58: uint8_t tm_mday;
+[; ;TimeLib.h: 59: uint8_t tm_mon;
+[; ;TimeLib.h: 60: uint8_t tm_year;
+[; ;TimeLib.h: 61: };
+[; ;TimeLib.h: 66: enum time_status {
+[; ;TimeLib.h: 67: E_TIME_NOT_SET = 0,
+[; ;TimeLib.h: 68: E_TIME_NEEDS_SYNC,
+[; ;TimeLib.h: 69: E_TIME_OK,
+[; ;TimeLib.h: 70: };
+[; ;TimeLib.h: 79: typedef time_t(* time_callback_t)();
+[; ;TimeLib.h: 98: void time_set(time_t now);
+[; ;TimeLib.h: 111: time_t time_get();
+[; ;TimeLib.h: 120: uint8_t time_second_t(time_t time);
+[; ;TimeLib.h: 129: uint8_t time_minute_t(time_t time);
+[; ;TimeLib.h: 138: uint8_t time_hour_t(time_t time);
+[; ;TimeLib.h: 145: uint8_t time_second();
+[; ;TimeLib.h: 152: uint8_t time_minute();
+[; ;TimeLib.h: 159: uint8_t time_hour();
+[; ;TimeLib.h: 173: time_t time_make(struct tm_t * timeinfo);
+[; ;TimeLib.h: 184: void time_break(time_t timeinput, struct tm_t * timeinfo);
+[; ;TimeLib.h: 198: void time_set_provider(time_callback_t callback, time_t timespan);
+[; ;TimeLib.h: 210: uint8_t time_get_status();
 "23 ../TimeLib.c
 [v _month_length `Cuc ~T0 @X0 -> 0 `x e ]
 [i _month_length
@@ -1005,443 +1014,763 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> -> 0 `i `l `ul
 ]
 [; ;TimeLib.c: 33: time_t sync_next = 0;
+"36
+[v _tcache `ul ~T0 @X0 1 e ]
+[; ;TimeLib.c: 36: time_t tcache;
 "37
+[v _telements `S89 ~T0 @X0 1 e ]
+[; ;TimeLib.c: 37: struct tm_t telements;
+"41
 [v _last_update `ul ~T0 @X0 1 e ]
 [i _last_update
 -> -> -> 0 `i `l `ul
 ]
-[; ;TimeLib.c: 37: unsigned long last_update = 0;
-"40
-[v _enTimeCurrentStatus `E1015 ~T0 @X0 1 e ]
-[i _enTimeCurrentStatus
+[; ;TimeLib.c: 41: unsigned long last_update = 0;
+"44
+[v _tstatus `E1015 ~T0 @X0 1 e ]
+[i _tstatus
 -> . `E1015 0 `E1015
 ]
-[; ;TimeLib.c: 40: enum enTimeStatus enTimeCurrentStatus = E_TIME_NOT_SET;
-"47
+[; ;TimeLib.c: 44: enum time_status tstatus = E_TIME_NOT_SET;
+"51
 [v _time_provider_callback `*F1020 ~T0 @X0 1 e ]
 [i _time_provider_callback
 -> -> 0 `i `*F1020
 ]
-[; ;TimeLib.c: 47: time_callback_t time_provider_callback = 0;
-"56
+[; ;TimeLib.c: 51: time_callback_t time_provider_callback = 0;
+"60
 [v _time_is_leap `(i ~T0 @X0 1 sf1`ui ]
-"57
+"61
 {
-[; ;TimeLib.c: 56: static int time_is_leap(unsigned int year)
-[; ;TimeLib.c: 57: {
+[; ;TimeLib.c: 60: static int time_is_leap(unsigned int year)
+[; ;TimeLib.c: 61: {
 [e :U _time_is_leap ]
-"56
+"60
 [v _year `ui ~T0 @X0 1 r1 ]
-"57
+"61
 [f ]
-[; ;TimeLib.c: 59: return((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
-"59
+[; ;TimeLib.c: 63: return((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
+"63
 [e ) -> || && == % _year -> -> 4 `i `ui -> -> 0 `i `ui != % _year -> -> 100 `i `ui -> -> 0 `i `ui == % _year -> -> 400 `i `ui -> -> 0 `i `ui `i ]
 [e $UE 90  ]
-[; ;TimeLib.c: 60: }
-"60
+[; ;TimeLib.c: 64: }
+"64
 [e :UE 90 ]
 }
 "66
-[v _time_set `(v ~T0 @X0 1 ef1`ul ]
+[v _time_update `(v ~T0 @X0 1 sf1`ul ]
 "67
 {
-[; ;TimeLib.c: 66: void time_set(time_t now)
+[; ;TimeLib.c: 66: static void time_update(time_t time)
 [; ;TimeLib.c: 67: {
-[e :U _time_set ]
+[e :U _time_update ]
 "66
-[v _now `ul ~T0 @X0 1 r1 ]
+[v _time `ul ~T0 @X0 1 r1 ]
 "67
 [f ]
-[; ;TimeLib.c: 68: sys_time = now;
+[; ;TimeLib.c: 68: if (tcache != time) {
 "68
-[e = _sys_time _now ]
-[; ;TimeLib.c: 69: sync_next = now + sync_interval;
+[e $ ! != _tcache _time 92  ]
+{
+[; ;TimeLib.c: 69: tcache = time;
 "69
-[e = _sync_next + _now _sync_interval ]
-[; ;TimeLib.c: 70: enTimeCurrentStatus = E_TIME_OK;
+[e = _tcache _time ]
+[; ;TimeLib.c: 70: time_break(time, &telements);
 "70
-[e = _enTimeCurrentStatus -> . `E1015 2 `E1015 ]
-[; ;TimeLib.c: 71: last_update = tick_get();
+[e ( _time_break (2 , _time &U _telements ]
 "71
-[e = _last_update ( _tick_get ..  ]
+}
+[e :U 92 ]
+[; ;TimeLib.c: 71: }
 [; ;TimeLib.c: 72: }
 "72
 [e :UE 91 ]
 }
-"74
-[v _time_get `(ul ~T0 @X0 1 ef ]
-"75
+"78
+[v _time_set `(v ~T0 @X0 1 ef1`ul ]
+"79
 {
-[; ;TimeLib.c: 74: time_t time_get()
-[; ;TimeLib.c: 75: {
+[; ;TimeLib.c: 78: void time_set(time_t now)
+[; ;TimeLib.c: 79: {
+[e :U _time_set ]
+"78
+[v _now `ul ~T0 @X0 1 r1 ]
+"79
+[f ]
+[; ;TimeLib.c: 80: sys_time = now;
+"80
+[e = _sys_time _now ]
+[; ;TimeLib.c: 81: sync_next = now + sync_interval;
+"81
+[e = _sync_next + _now _sync_interval ]
+[; ;TimeLib.c: 82: tstatus = E_TIME_OK;
+"82
+[e = _tstatus -> . `E1015 2 `E1015 ]
+[; ;TimeLib.c: 83: last_update = tick_get();
+"83
+[e = _last_update ( _tick_get ..  ]
+[; ;TimeLib.c: 84: }
+"84
+[e :UE 93 ]
+}
+"86
+[v _time_get `(ul ~T0 @X0 1 ef ]
+"87
+{
+[; ;TimeLib.c: 86: time_t time_get()
+[; ;TimeLib.c: 87: {
 [e :U _time_get ]
 [f ]
-"76
-[v _now `ul ~T0 @X0 1 a ]
-[; ;TimeLib.c: 76: time_t now = 0;
-[e = _now -> -> -> 0 `i `l `ul ]
-[; ;TimeLib.c: 79: if (sync_next <= sys_time) {
-"79
-[e $ ! <= _sync_next _sys_time 93  ]
-{
-[; ;TimeLib.c: 81: if (time_provider_callback != 0) {
-"81
-[e $ ! != _time_provider_callback -> -> 0 `i `*F1020 94  ]
-{
-[; ;TimeLib.c: 83: now = time_provider_callback();
-"83
-[e = _now ( *U _time_provider_callback ..  ]
-[; ;TimeLib.c: 85: if (now != 0)
-"85
-[e $ ! != _now -> -> -> 0 `i `l `ul 95  ]
-[; ;TimeLib.c: 86: time_set(now);
-"86
-[e ( _time_set (1 _now ]
-[e $U 96  ]
-"87
-[e :U 95 ]
-[; ;TimeLib.c: 87: else {
-{
-[; ;TimeLib.c: 88: sync_next = sys_time + sync_interval;
 "88
+[v _now `ul ~T0 @X0 1 a ]
+[; ;TimeLib.c: 88: time_t now = 0;
+[e = _now -> -> -> 0 `i `l `ul ]
+[; ;TimeLib.c: 91: if (sync_next <= sys_time) {
+"91
+[e $ ! <= _sync_next _sys_time 95  ]
+{
+[; ;TimeLib.c: 93: if (time_provider_callback != 0) {
+"93
+[e $ ! != _time_provider_callback -> -> 0 `i `*F1020 96  ]
+{
+[; ;TimeLib.c: 95: now = time_provider_callback();
+"95
+[e = _now ( *U _time_provider_callback ..  ]
+[; ;TimeLib.c: 97: if (now != 0)
+"97
+[e $ ! != _now -> -> -> 0 `i `l `ul 97  ]
+[; ;TimeLib.c: 98: time_set(now);
+"98
+[e ( _time_set (1 _now ]
+[e $U 98  ]
+"99
+[e :U 97 ]
+[; ;TimeLib.c: 99: else {
+{
+[; ;TimeLib.c: 100: sync_next = sys_time + sync_interval;
+"100
 [e = _sync_next + _sys_time _sync_interval ]
-[; ;TimeLib.c: 89: enTimeCurrentStatus = (enTimeCurrentStatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
-"89
-[e = _enTimeCurrentStatus -> ? == -> _enTimeCurrentStatus `i -> . `E1015 0 `i : -> . `E1015 0 `i -> . `E1015 1 `i `E1015 ]
-"90
+[; ;TimeLib.c: 101: tstatus = (tstatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
+"101
+[e = _tstatus -> ? == -> _tstatus `i -> . `E1015 0 `i : -> . `E1015 0 `i -> . `E1015 1 `i `E1015 ]
+"102
+}
+[e :U 98 ]
+"103
 }
 [e :U 96 ]
-"91
+"104
 }
-[e :U 94 ]
-"92
-}
-[e :U 93 ]
-[; ;TimeLib.c: 90: }
-[; ;TimeLib.c: 91: }
-[; ;TimeLib.c: 92: }
-[; ;TimeLib.c: 96: while (tick_get() - last_update >= ((unsigned long long)((1000000 + 128ull)/8ull))) {
-"96
-[e $U 97  ]
-[e :U 98 ]
-{
-[; ;TimeLib.c: 98: sys_time++;
-"98
-[e ++ _sys_time -> -> -> 1 `i `l `ul ]
-[; ;TimeLib.c: 99: last_update += ((unsigned long long)((1000000 + 128ull)/8ull));
-"99
-[e =+ _last_update / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul ]
-"100
-}
-[e :U 97 ]
-"96
-[e $ >= - ( _tick_get ..  _last_update / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul 98  ]
-[e :U 99 ]
-[; ;TimeLib.c: 100: }
-[; ;TimeLib.c: 102: return sys_time;
-"102
-[e ) _sys_time ]
-[e $UE 92  ]
+[e :U 95 ]
+[; ;TimeLib.c: 102: }
 [; ;TimeLib.c: 103: }
-"103
-[e :UE 92 ]
-}
-"105
-[v _time_make `(ul ~T0 @X0 1 ef1`*S89 ]
-"106
-{
-[; ;TimeLib.c: 105: time_t time_make(struct tm_t * timeinfo)
-[; ;TimeLib.c: 106: {
-[e :U _time_make ]
-"105
-[v _timeinfo `*S89 ~T0 @X0 1 r1 ]
-"106
-[f ]
-"107
-[v _i `i ~T0 @X0 1 a ]
+[; ;TimeLib.c: 104: }
+[; ;TimeLib.c: 108: while (tick_get() - last_update >= ((unsigned long long)((1000000 + 128ull)/8ull))) {
 "108
-[v _tstamp `ul ~T0 @X0 1 a ]
-[; ;TimeLib.c: 107: int i;
-[; ;TimeLib.c: 108: uint32_t tstamp;
-[; ;TimeLib.c: 112: tstamp = timeinfo->tm_year * ((86400UL) * 365);
+[e $U 99  ]
+[e :U 100 ]
+{
+[; ;TimeLib.c: 110: sys_time++;
+"110
+[e ++ _sys_time -> -> -> 1 `i `l `ul ]
+[; ;TimeLib.c: 111: last_update += ((unsigned long long)((1000000 + 128ull)/8ull));
+"111
+[e =+ _last_update / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul ]
 "112
-[e = _tstamp * -> . *U _timeinfo 6 `ul * -> 86400 `ul -> -> -> 365 `i `l `ul ]
-[; ;TimeLib.c: 114: for (i = 0; i < timeinfo->tm_year; i++) {
-"114
-{
-[e = _i -> 0 `i ]
-[e $U 104  ]
+}
+[e :U 99 ]
+"108
+[e $ >= - ( _tick_get ..  _last_update / + -> -> 1000000 `l `ul -> 128 `ul -> 8 `ul 100  ]
 [e :U 101 ]
-{
-[; ;TimeLib.c: 115: if (time_is_leap(i + 1970))
-"115
-[e $ ! != ( _time_is_leap (1 -> + _i -> 1970 `i `ui -> 0 `i 105  ]
-[; ;TimeLib.c: 116: tstamp += (86400UL);
-"116
-[e =+ _tstamp -> 86400 `ul ]
-[e :U 105 ]
-"117
-}
+[; ;TimeLib.c: 112: }
+[; ;TimeLib.c: 114: return sys_time;
 "114
-[e ++ _i -> 1 `i ]
-[e :U 104 ]
-[e $ < _i -> . *U _timeinfo 6 `i 101  ]
-[e :U 102 ]
+[e ) _sys_time ]
+[e $UE 94  ]
+[; ;TimeLib.c: 115: }
+"115
+[e :UE 94 ]
+}
 "117
-}
-[; ;TimeLib.c: 117: }
-[; ;TimeLib.c: 119: for (i = 1; i < timeinfo->tm_mon; i++) {
+[v _time_second_t `(uc ~T0 @X0 1 ef1`ul ]
+"118
+{
+[; ;TimeLib.c: 117: uint8_t time_second_t(time_t time)
+[; ;TimeLib.c: 118: {
+[e :U _time_second_t ]
+"117
+[v _time `ul ~T0 @X0 1 r1 ]
+"118
+[f ]
+[; ;TimeLib.c: 119: time_update(time);
 "119
-{
-[e = _i -> 1 `i ]
-[e $U 109  ]
-[e :U 106 ]
-{
-[; ;TimeLib.c: 120: if (i == 2 && time_is_leap(timeinfo->tm_year + 1970))
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 120: return telements.tm_sec;
 "120
-[e $ ! && == _i -> 2 `i != ( _time_is_leap (1 -> + -> . *U _timeinfo 6 `i -> 1970 `i `ui -> 0 `i 110  ]
-[; ;TimeLib.c: 121: tstamp += (86400UL) * 29;
+[e ) . _telements 0 ]
+[e $UE 102  ]
+[; ;TimeLib.c: 121: }
 "121
-[e =+ _tstamp * -> 86400 `ul -> -> -> 29 `i `l `ul ]
-[e $U 111  ]
-"122
-[e :U 110 ]
-[; ;TimeLib.c: 122: else
-[; ;TimeLib.c: 123: tstamp += (86400UL) * month_length[i - 1];
+[e :UE 102 ]
+}
 "123
-[e =+ _tstamp * -> 86400 `ul -> *U + &U _month_length * -> -> - _i -> 1 `i `ui `ux -> -> # *U &U _month_length `ui `ux `ul ]
-[e :U 111 ]
+[v _time_minute_t `(uc ~T0 @X0 1 ef1`ul ]
 "124
-}
-"119
-[e ++ _i -> 1 `i ]
-[e :U 109 ]
-[e $ < _i -> . *U _timeinfo 5 `i 106  ]
-[e :U 107 ]
+{
+[; ;TimeLib.c: 123: uint8_t time_minute_t(time_t time)
+[; ;TimeLib.c: 124: {
+[e :U _time_minute_t ]
+"123
+[v _time `ul ~T0 @X0 1 r1 ]
 "124
-}
-[; ;TimeLib.c: 124: }
-[; ;TimeLib.c: 126: tstamp += (uint32_t) (timeinfo->tm_mday - 1) * (uint32_t) (86400UL);
+[f ]
+[; ;TimeLib.c: 125: time_update(time);
+"125
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 126: return telements.tm_min;
 "126
-[e =+ _tstamp * -> - -> . *U _timeinfo 4 `i -> 1 `i `ul -> 86400 `ul ]
-[; ;TimeLib.c: 128: tstamp += (uint32_t) timeinfo->tm_hour * (uint32_t) (3600UL);
-"128
-[e =+ _tstamp * -> . *U _timeinfo 2 `ul -> 3600 `ul ]
-[; ;TimeLib.c: 129: tstamp += (uint32_t) timeinfo->tm_min * (uint32_t) (60UL);
+[e ) . _telements 1 ]
+[e $UE 103  ]
+[; ;TimeLib.c: 127: }
+"127
+[e :UE 103 ]
+}
 "129
-[e =+ _tstamp * -> . *U _timeinfo 1 `ul -> 60 `ul ]
-[; ;TimeLib.c: 130: tstamp += (uint32_t) timeinfo->tm_sec;
+[v _time_hour_t `(uc ~T0 @X0 1 ef1`ul ]
 "130
-[e =+ _tstamp -> . *U _timeinfo 0 `ul ]
-[; ;TimeLib.c: 132: return tstamp;
+{
+[; ;TimeLib.c: 129: uint8_t time_hour_t(time_t time)
+[; ;TimeLib.c: 130: {
+[e :U _time_hour_t ]
+"129
+[v _time `ul ~T0 @X0 1 r1 ]
+"130
+[f ]
+[; ;TimeLib.c: 131: time_update(time);
+"131
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 132: return telements.tm_hour;
 "132
-[e ) _tstamp ]
-[e $UE 100  ]
+[e ) . _telements 2 ]
+[e $UE 104  ]
 [; ;TimeLib.c: 133: }
 "133
-[e :UE 100 ]
+[e :UE 104 ]
 }
 "135
-[v _time_break `(v ~T0 @X0 1 ef2`ul`*S89 ]
+[v _time_wday_t `(uc ~T0 @X0 1 ef1`ul ]
 "136
 {
-[; ;TimeLib.c: 135: void time_break(time_t timeinput, struct tm_t * timeinfo)
+[; ;TimeLib.c: 135: uint8_t time_wday_t(time_t time)
 [; ;TimeLib.c: 136: {
-[e :U _time_break ]
+[e :U _time_wday_t ]
 "135
-[v _timeinput `ul ~T0 @X0 1 r1 ]
-[v _timeinfo `*S89 ~T0 @X0 1 r2 ]
+[v _time `ul ~T0 @X0 1 r1 ]
 "136
 [f ]
+[; ;TimeLib.c: 137: time_update(time);
 "137
-[v _year `uc ~T0 @X0 1 a ]
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 138: return telements.tm_wday;
 "138
-[v _month `uc ~T0 @X0 1 a ]
-[v _monthLength `uc ~T0 @X0 1 a ]
+[e ) . _telements 3 ]
+[e $UE 105  ]
+[; ;TimeLib.c: 139: }
 "139
-[v _xTime `ul ~T0 @X0 1 a ]
-"140
-[v _days `ul ~T0 @X0 1 a ]
-[; ;TimeLib.c: 137: uint8_t year;
-[; ;TimeLib.c: 138: uint8_t month, monthLength;
-[; ;TimeLib.c: 139: uint32_t xTime;
-[; ;TimeLib.c: 140: unsigned long days;
-[; ;TimeLib.c: 142: xTime = (uint32_t) timeinput;
+[e :UE 105 ]
+}
+"141
+[v _time_day_t `(uc ~T0 @X0 1 ef1`ul ]
 "142
-[e = _xTime _timeinput ]
-[; ;TimeLib.c: 143: timeinfo->tm_sec = xTime % 60;
+{
+[; ;TimeLib.c: 141: uint8_t time_day_t(time_t time)
+[; ;TimeLib.c: 142: {
+[e :U _time_day_t ]
+"141
+[v _time `ul ~T0 @X0 1 r1 ]
+"142
+[f ]
+[; ;TimeLib.c: 143: time_update(time);
 "143
-[e = . *U _timeinfo 0 -> % _xTime -> -> -> 60 `i `l `ul `uc ]
-[; ;TimeLib.c: 145: xTime /= 60;
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 144: return telements.tm_mday;
+"144
+[e ) . _telements 4 ]
+[e $UE 106  ]
+[; ;TimeLib.c: 145: }
 "145
-[e =/ _xTime -> -> 60 `uc `ul ]
-[; ;TimeLib.c: 146: timeinfo->tm_min = xTime % 60;
-"146
-[e = . *U _timeinfo 1 -> % _xTime -> -> -> 60 `i `l `ul `uc ]
-[; ;TimeLib.c: 148: xTime /= 60;
+[e :UE 106 ]
+}
+"147
+[v _time_month_t `(uc ~T0 @X0 1 ef1`ul ]
 "148
-[e =/ _xTime -> -> 60 `uc `ul ]
-[; ;TimeLib.c: 149: timeinfo->tm_hour = xTime % 24;
+{
+[; ;TimeLib.c: 147: uint8_t time_month_t(time_t time)
+[; ;TimeLib.c: 148: {
+[e :U _time_month_t ]
+"147
+[v _time `ul ~T0 @X0 1 r1 ]
+"148
+[f ]
+[; ;TimeLib.c: 149: time_update(time);
 "149
-[e = . *U _timeinfo 2 -> % _xTime -> -> -> 24 `i `l `ul `uc ]
-[; ;TimeLib.c: 151: xTime /= 24;
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 150: return telements.tm_mon;
+"150
+[e ) . _telements 5 ]
+[e $UE 107  ]
+[; ;TimeLib.c: 151: }
 "151
-[e =/ _xTime -> -> 24 `uc `ul ]
-[; ;TimeLib.c: 152: timeinfo->tm_wday = ((xTime + 4) % 7) + 1;
-"152
-[e = . *U _timeinfo 3 -> + % + _xTime -> -> -> 4 `i `l `ul -> -> -> 7 `i `l `ul -> -> -> 1 `i `l `ul `uc ]
-[; ;TimeLib.c: 154: year = 0;
+[e :UE 107 ]
+}
+"153
+[v _time_year_t `(ui ~T0 @X0 1 ef1`ul ]
 "154
-[e = _year -> -> 0 `i `uc ]
-[; ;TimeLib.c: 155: days = 0;
+{
+[; ;TimeLib.c: 153: uint16_t time_year_t(time_t time)
+[; ;TimeLib.c: 154: {
+[e :U _time_year_t ]
+"153
+[v _time `ul ~T0 @X0 1 r1 ]
+"154
+[f ]
+[; ;TimeLib.c: 155: time_update(time);
 "155
-[e = _days -> -> -> 0 `i `l `ul ]
-[; ;TimeLib.c: 156: while ((unsigned) (days += (time_is_leap(1970 + year) ? 366 : 365)) <= xTime)
+[e ( _time_update (1 _time ]
+[; ;TimeLib.c: 156: return telements.tm_mon;
 "156
-[e $U 113  ]
-[e :U 114 ]
-[; ;TimeLib.c: 157: year++;
+[e ) -> . _telements 5 `ui ]
+[e $UE 108  ]
+[; ;TimeLib.c: 157: }
 "157
-[e ++ _year -> -> 1 `i `uc ]
-[e :U 113 ]
-"156
-[e $ <= -> -> =+ _days -> -> ? != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i : -> 366 `i -> 365 `i `l `ul `ui `ul _xTime 114  ]
-[e :U 115 ]
-[; ;TimeLib.c: 159: timeinfo->tm_year = year;
+[e :UE 108 ]
+}
 "159
-[e = . *U _timeinfo 6 _year ]
-[; ;TimeLib.c: 161: days -= time_is_leap(1970 + year) ? 366 : 365;
+[v _time_second `(uc ~T0 @X0 1 ef ]
+"160
+{
+[; ;TimeLib.c: 159: uint8_t time_second()
+[; ;TimeLib.c: 160: {
+[e :U _time_second ]
+[f ]
+[; ;TimeLib.c: 161: return time_second_t(time_get());
 "161
-[e =- _days -> -> ? != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i : -> 366 `i -> 365 `i `l `ul ]
-[; ;TimeLib.c: 162: xTime -= days;
+[e ) ( _time_second_t (1 ( _time_get ..  ]
+[e $UE 109  ]
+[; ;TimeLib.c: 162: }
 "162
-[e =- _xTime _days ]
-[; ;TimeLib.c: 164: days = 0;
+[e :UE 109 ]
+}
 "164
-[e = _days -> -> -> 0 `i `l `ul ]
-[; ;TimeLib.c: 165: month = 0;
+[v _time_minute `(uc ~T0 @X0 1 ef ]
 "165
-[e = _month -> -> 0 `i `uc ]
-[; ;TimeLib.c: 166: monthLength = 0;
+{
+[; ;TimeLib.c: 164: uint8_t time_minute()
+[; ;TimeLib.c: 165: {
+[e :U _time_minute ]
+[f ]
+[; ;TimeLib.c: 166: return time_minute_t(time_get());
 "166
-[e = _monthLength -> -> 0 `i `uc ]
-[; ;TimeLib.c: 167: for (month = 0; month < 12; month++) {
+[e ) ( _time_minute_t (1 ( _time_get ..  ]
+[e $UE 110  ]
+[; ;TimeLib.c: 167: }
 "167
-{
-[e = _month -> -> 0 `i `uc ]
-[e $ < -> _month `i -> 12 `i 116  ]
-[e $U 117  ]
-[e :U 116 ]
-{
-[; ;TimeLib.c: 169: if (month == 1) {
+[e :UE 110 ]
+}
 "169
-[e $ ! == -> _month `i -> 1 `i 119  ]
-{
-[; ;TimeLib.c: 170: if (time_is_leap(1970 + year)) {
+[v _time_hour `(uc ~T0 @X0 1 ef ]
 "170
-[e $ ! != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i 120  ]
 {
-[; ;TimeLib.c: 171: monthLength = 29;
+[; ;TimeLib.c: 169: uint8_t time_hour()
+[; ;TimeLib.c: 170: {
+[e :U _time_hour ]
+[f ]
+[; ;TimeLib.c: 171: return time_hour_t(time_get());
 "171
-[e = _monthLength -> -> 29 `i `uc ]
+[e ) ( _time_hour_t (1 ( _time_get ..  ]
+[e $UE 111  ]
+[; ;TimeLib.c: 172: }
 "172
+[e :UE 111 ]
 }
-[; ;TimeLib.c: 172: } else {
-[e $U 121  ]
-[e :U 120 ]
-{
-[; ;TimeLib.c: 173: monthLength = 28;
-"173
-[e = _monthLength -> -> 28 `i `uc ]
 "174
-}
-[e :U 121 ]
+[v _time_wday `(uc ~T0 @X0 1 ef ]
 "175
-}
-[; ;TimeLib.c: 174: }
-[; ;TimeLib.c: 175: } else {
-[e $U 122  ]
-[e :U 119 ]
 {
-[; ;TimeLib.c: 176: monthLength = month_length[month];
+[; ;TimeLib.c: 174: uint8_t time_wday()
+[; ;TimeLib.c: 175: {
+[e :U _time_wday ]
+[f ]
+[; ;TimeLib.c: 176: return time_wday_t(time_get());
 "176
-[e = _monthLength *U + &U _month_length * -> _month `ux -> -> # *U &U _month_length `ui `ux ]
-"177
-}
-[e :U 122 ]
+[e ) ( _time_wday_t (1 ( _time_get ..  ]
+[e $UE 112  ]
 [; ;TimeLib.c: 177: }
-[; ;TimeLib.c: 179: if (xTime >= monthLength) {
-"179
-[e $ ! >= _xTime -> _monthLength `ul 123  ]
-{
-[; ;TimeLib.c: 180: xTime -= monthLength;
-"180
-[e =- _xTime -> _monthLength `ul ]
-"181
-}
-[; ;TimeLib.c: 181: } else {
-[e $U 124  ]
-[e :U 123 ]
-{
-[; ;TimeLib.c: 182: break;
-"182
-[e $U 117  ]
-"183
-}
-[e :U 124 ]
-"184
-}
-"167
-[e ++ _month -> -> 1 `i `uc ]
-[e $ < -> _month `i -> 12 `i 116  ]
-[e :U 117 ]
-"184
-}
-[; ;TimeLib.c: 183: }
-[; ;TimeLib.c: 184: }
-[; ;TimeLib.c: 185: timeinfo->tm_mon = month + 1;
-"185
-[e = . *U _timeinfo 5 -> + -> _month `i -> 1 `i `uc ]
-[; ;TimeLib.c: 186: timeinfo->tm_mday = xTime + 1;
-"186
-[e = . *U _timeinfo 4 -> + _xTime -> -> -> 1 `i `l `ul `uc ]
-[; ;TimeLib.c: 187: }
-"187
+"177
 [e :UE 112 ]
 }
+"179
+[v _time_day `(uc ~T0 @X0 1 ef ]
+"180
+{
+[; ;TimeLib.c: 179: uint8_t time_day()
+[; ;TimeLib.c: 180: {
+[e :U _time_day ]
+[f ]
+[; ;TimeLib.c: 181: return time_day_t(time_get());
+"181
+[e ) ( _time_day_t (1 ( _time_get ..  ]
+[e $UE 113  ]
+[; ;TimeLib.c: 182: }
+"182
+[e :UE 113 ]
+}
+"184
+[v _time_month `(uc ~T0 @X0 1 ef ]
+"185
+{
+[; ;TimeLib.c: 184: uint8_t time_month()
+[; ;TimeLib.c: 185: {
+[e :U _time_month ]
+[f ]
+[; ;TimeLib.c: 186: return time_month_t(time_get());
+"186
+[e ) ( _time_month_t (1 ( _time_get ..  ]
+[e $UE 114  ]
+[; ;TimeLib.c: 187: }
+"187
+[e :UE 114 ]
+}
 "189
-[v _time_set_provider `(v ~T0 @X0 1 ef2`*F1020`ul ]
+[v _time_year `(ui ~T0 @X0 1 ef ]
 "190
 {
-[; ;TimeLib.c: 189: void time_set_provider(time_callback_t callback, time_t timespan)
+[; ;TimeLib.c: 189: uint16_t time_year()
 [; ;TimeLib.c: 190: {
+[e :U _time_year ]
+[f ]
+[; ;TimeLib.c: 191: return time_year_t(time_get());
+"191
+[e ) ( _time_year_t (1 ( _time_get ..  ]
+[e $UE 115  ]
+[; ;TimeLib.c: 192: }
+"192
+[e :UE 115 ]
+}
+"194
+[v _time_make `(ul ~T0 @X0 1 ef1`*S89 ]
+"195
+{
+[; ;TimeLib.c: 194: time_t time_make(struct tm_t * timeinfo)
+[; ;TimeLib.c: 195: {
+[e :U _time_make ]
+"194
+[v _timeinfo `*S89 ~T0 @X0 1 r1 ]
+"195
+[f ]
+"196
+[v _i `i ~T0 @X0 1 a ]
+"197
+[v _tstamp `ul ~T0 @X0 1 a ]
+[; ;TimeLib.c: 196: int i;
+[; ;TimeLib.c: 197: uint32_t tstamp;
+[; ;TimeLib.c: 201: tstamp = timeinfo->tm_year * ((86400UL) * 365);
+"201
+[e = _tstamp * -> . *U _timeinfo 6 `ul * -> 86400 `ul -> -> -> 365 `i `l `ul ]
+[; ;TimeLib.c: 203: for (i = 0; i < timeinfo->tm_year; i++) {
+"203
+{
+[e = _i -> 0 `i ]
+[e $U 120  ]
+[e :U 117 ]
+{
+[; ;TimeLib.c: 204: if (time_is_leap(i + 1970))
+"204
+[e $ ! != ( _time_is_leap (1 -> + _i -> 1970 `i `ui -> 0 `i 121  ]
+[; ;TimeLib.c: 205: tstamp += (86400UL);
+"205
+[e =+ _tstamp -> 86400 `ul ]
+[e :U 121 ]
+"206
+}
+"203
+[e ++ _i -> 1 `i ]
+[e :U 120 ]
+[e $ < _i -> . *U _timeinfo 6 `i 117  ]
+[e :U 118 ]
+"206
+}
+[; ;TimeLib.c: 206: }
+[; ;TimeLib.c: 208: for (i = 1; i < timeinfo->tm_mon; i++) {
+"208
+{
+[e = _i -> 1 `i ]
+[e $U 125  ]
+[e :U 122 ]
+{
+[; ;TimeLib.c: 209: if (i == 2 && time_is_leap(timeinfo->tm_year + 1970))
+"209
+[e $ ! && == _i -> 2 `i != ( _time_is_leap (1 -> + -> . *U _timeinfo 6 `i -> 1970 `i `ui -> 0 `i 126  ]
+[; ;TimeLib.c: 210: tstamp += (86400UL) * 29;
+"210
+[e =+ _tstamp * -> 86400 `ul -> -> -> 29 `i `l `ul ]
+[e $U 127  ]
+"211
+[e :U 126 ]
+[; ;TimeLib.c: 211: else
+[; ;TimeLib.c: 212: tstamp += (86400UL) * month_length[i - 1];
+"212
+[e =+ _tstamp * -> 86400 `ul -> *U + &U _month_length * -> -> - _i -> 1 `i `ui `ux -> -> # *U &U _month_length `ui `ux `ul ]
+[e :U 127 ]
+"213
+}
+"208
+[e ++ _i -> 1 `i ]
+[e :U 125 ]
+[e $ < _i -> . *U _timeinfo 5 `i 122  ]
+[e :U 123 ]
+"213
+}
+[; ;TimeLib.c: 213: }
+[; ;TimeLib.c: 215: tstamp += (uint32_t) (timeinfo->tm_mday - 1) * (uint32_t) (86400UL);
+"215
+[e =+ _tstamp * -> - -> . *U _timeinfo 4 `i -> 1 `i `ul -> 86400 `ul ]
+[; ;TimeLib.c: 217: tstamp += (uint32_t) timeinfo->tm_hour * (uint32_t) (3600UL);
+"217
+[e =+ _tstamp * -> . *U _timeinfo 2 `ul -> 3600 `ul ]
+[; ;TimeLib.c: 218: tstamp += (uint32_t) timeinfo->tm_min * (uint32_t) (60UL);
+"218
+[e =+ _tstamp * -> . *U _timeinfo 1 `ul -> 60 `ul ]
+[; ;TimeLib.c: 219: tstamp += (uint32_t) timeinfo->tm_sec;
+"219
+[e =+ _tstamp -> . *U _timeinfo 0 `ul ]
+[; ;TimeLib.c: 221: return tstamp;
+"221
+[e ) _tstamp ]
+[e $UE 116  ]
+[; ;TimeLib.c: 222: }
+"222
+[e :UE 116 ]
+}
+"224
+[v _time_break `(v ~T0 @X0 1 ef2`ul`*S89 ]
+"225
+{
+[; ;TimeLib.c: 224: void time_break(time_t timeinput, struct tm_t * timeinfo)
+[; ;TimeLib.c: 225: {
+[e :U _time_break ]
+"224
+[v _timeinput `ul ~T0 @X0 1 r1 ]
+[v _timeinfo `*S89 ~T0 @X0 1 r2 ]
+"225
+[f ]
+"226
+[v _year `uc ~T0 @X0 1 a ]
+"227
+[v _month `uc ~T0 @X0 1 a ]
+[v _monthLength `uc ~T0 @X0 1 a ]
+"228
+[v _xTime `ul ~T0 @X0 1 a ]
+"229
+[v _days `ul ~T0 @X0 1 a ]
+[; ;TimeLib.c: 226: uint8_t year;
+[; ;TimeLib.c: 227: uint8_t month, monthLength;
+[; ;TimeLib.c: 228: uint32_t xTime;
+[; ;TimeLib.c: 229: unsigned long days;
+[; ;TimeLib.c: 231: xTime = (uint32_t) timeinput;
+"231
+[e = _xTime _timeinput ]
+[; ;TimeLib.c: 232: timeinfo->tm_sec = xTime % 60;
+"232
+[e = . *U _timeinfo 0 -> % _xTime -> -> -> 60 `i `l `ul `uc ]
+[; ;TimeLib.c: 234: xTime /= 60;
+"234
+[e =/ _xTime -> -> 60 `uc `ul ]
+[; ;TimeLib.c: 235: timeinfo->tm_min = xTime % 60;
+"235
+[e = . *U _timeinfo 1 -> % _xTime -> -> -> 60 `i `l `ul `uc ]
+[; ;TimeLib.c: 237: xTime /= 60;
+"237
+[e =/ _xTime -> -> 60 `uc `ul ]
+[; ;TimeLib.c: 238: timeinfo->tm_hour = xTime % 24;
+"238
+[e = . *U _timeinfo 2 -> % _xTime -> -> -> 24 `i `l `ul `uc ]
+[; ;TimeLib.c: 240: xTime /= 24;
+"240
+[e =/ _xTime -> -> 24 `uc `ul ]
+[; ;TimeLib.c: 241: timeinfo->tm_wday = ((xTime + 4) % 7) + 1;
+"241
+[e = . *U _timeinfo 3 -> + % + _xTime -> -> -> 4 `i `l `ul -> -> -> 7 `i `l `ul -> -> -> 1 `i `l `ul `uc ]
+[; ;TimeLib.c: 243: year = 0;
+"243
+[e = _year -> -> 0 `i `uc ]
+[; ;TimeLib.c: 244: days = 0;
+"244
+[e = _days -> -> -> 0 `i `l `ul ]
+[; ;TimeLib.c: 245: while ((unsigned) (days += (time_is_leap(1970 + year) ? 366 : 365)) <= xTime)
+"245
+[e $U 129  ]
+[e :U 130 ]
+[; ;TimeLib.c: 246: year++;
+"246
+[e ++ _year -> -> 1 `i `uc ]
+[e :U 129 ]
+"245
+[e $ <= -> -> =+ _days -> -> ? != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i : -> 366 `i -> 365 `i `l `ul `ui `ul _xTime 130  ]
+[e :U 131 ]
+[; ;TimeLib.c: 248: timeinfo->tm_year = year;
+"248
+[e = . *U _timeinfo 6 _year ]
+[; ;TimeLib.c: 250: days -= time_is_leap(1970 + year) ? 366 : 365;
+"250
+[e =- _days -> -> ? != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i : -> 366 `i -> 365 `i `l `ul ]
+[; ;TimeLib.c: 251: xTime -= days;
+"251
+[e =- _xTime _days ]
+[; ;TimeLib.c: 253: days = 0;
+"253
+[e = _days -> -> -> 0 `i `l `ul ]
+[; ;TimeLib.c: 254: month = 0;
+"254
+[e = _month -> -> 0 `i `uc ]
+[; ;TimeLib.c: 255: monthLength = 0;
+"255
+[e = _monthLength -> -> 0 `i `uc ]
+[; ;TimeLib.c: 256: for (month = 0; month < 12; month++) {
+"256
+{
+[e = _month -> -> 0 `i `uc ]
+[e $ < -> _month `i -> 12 `i 132  ]
+[e $U 133  ]
+[e :U 132 ]
+{
+[; ;TimeLib.c: 258: if (month == 1) {
+"258
+[e $ ! == -> _month `i -> 1 `i 135  ]
+{
+[; ;TimeLib.c: 259: if (time_is_leap(1970 + year)) {
+"259
+[e $ ! != ( _time_is_leap (1 -> + -> 1970 `i -> _year `i `ui -> 0 `i 136  ]
+{
+[; ;TimeLib.c: 260: monthLength = 29;
+"260
+[e = _monthLength -> -> 29 `i `uc ]
+"261
+}
+[; ;TimeLib.c: 261: } else {
+[e $U 137  ]
+[e :U 136 ]
+{
+[; ;TimeLib.c: 262: monthLength = 28;
+"262
+[e = _monthLength -> -> 28 `i `uc ]
+"263
+}
+[e :U 137 ]
+"264
+}
+[; ;TimeLib.c: 263: }
+[; ;TimeLib.c: 264: } else {
+[e $U 138  ]
+[e :U 135 ]
+{
+[; ;TimeLib.c: 265: monthLength = month_length[month];
+"265
+[e = _monthLength *U + &U _month_length * -> _month `ux -> -> # *U &U _month_length `ui `ux ]
+"266
+}
+[e :U 138 ]
+[; ;TimeLib.c: 266: }
+[; ;TimeLib.c: 268: if (xTime >= monthLength) {
+"268
+[e $ ! >= _xTime -> _monthLength `ul 139  ]
+{
+[; ;TimeLib.c: 269: xTime -= monthLength;
+"269
+[e =- _xTime -> _monthLength `ul ]
+"270
+}
+[; ;TimeLib.c: 270: } else {
+[e $U 140  ]
+[e :U 139 ]
+{
+[; ;TimeLib.c: 271: break;
+"271
+[e $U 133  ]
+"272
+}
+[e :U 140 ]
+"273
+}
+"256
+[e ++ _month -> -> 1 `i `uc ]
+[e $ < -> _month `i -> 12 `i 132  ]
+[e :U 133 ]
+"273
+}
+[; ;TimeLib.c: 272: }
+[; ;TimeLib.c: 273: }
+[; ;TimeLib.c: 274: timeinfo->tm_mon = month + 1;
+"274
+[e = . *U _timeinfo 5 -> + -> _month `i -> 1 `i `uc ]
+[; ;TimeLib.c: 275: timeinfo->tm_mday = xTime + 1;
+"275
+[e = . *U _timeinfo 4 -> + _xTime -> -> -> 1 `i `l `ul `uc ]
+[; ;TimeLib.c: 276: }
+"276
+[e :UE 128 ]
+}
+"278
+[v _time_set_provider `(v ~T0 @X0 1 ef2`*F1020`ul ]
+"279
+{
+[; ;TimeLib.c: 278: void time_set_provider(time_callback_t callback, time_t timespan)
+[; ;TimeLib.c: 279: {
 [e :U _time_set_provider ]
-"189
+"278
 [v _callback `*F1020 ~T0 @X0 1 r1 ]
 [v _timespan `ul ~T0 @X0 1 r2 ]
-"190
+"279
 [f ]
-[; ;TimeLib.c: 192: if (callback == 0)
-"192
-[e $ ! == _callback -> -> 0 `i `*F1020 126  ]
-[; ;TimeLib.c: 193: return;
-"193
-[e $UE 125  ]
-[e :U 126 ]
-[; ;TimeLib.c: 195: time_provider_callback = callback;
-"195
+[; ;TimeLib.c: 281: if (callback == 0)
+"281
+[e $ ! == _callback -> -> 0 `i `*F1020 142  ]
+[; ;TimeLib.c: 282: return;
+"282
+[e $UE 141  ]
+[e :U 142 ]
+[; ;TimeLib.c: 284: time_provider_callback = callback;
+"284
 [e = _time_provider_callback _callback ]
-[; ;TimeLib.c: 197: sync_interval = (timespan == 0) ? (86400UL) : timespan;
-"197
+[; ;TimeLib.c: 286: sync_interval = (timespan == 0) ? (86400UL) : timespan;
+"286
 [e = _sync_interval ? == _timespan -> -> -> 0 `i `l `ul : -> 86400 `ul _timespan ]
-[; ;TimeLib.c: 199: sync_next = sys_time;
-"199
+[; ;TimeLib.c: 288: sync_next = sys_time;
+"288
 [e = _sync_next _sys_time ]
-[; ;TimeLib.c: 201: time_get();
-"201
+[; ;TimeLib.c: 290: time_get();
+"290
 [e ( _time_get ..  ]
-[; ;TimeLib.c: 202: }
-"202
-[e :UE 125 ]
+[; ;TimeLib.c: 291: }
+"291
+[e :UE 141 ]
+}
+"293
+[v _time_get_status `(uc ~T0 @X0 1 ef ]
+"294
+{
+[; ;TimeLib.c: 293: uint8_t time_get_status()
+[; ;TimeLib.c: 294: {
+[e :U _time_get_status ]
+[f ]
+[; ;TimeLib.c: 295: time_get();
+"295
+[e ( _time_get ..  ]
+[; ;TimeLib.c: 296: return tstatus;
+"296
+[e ) -> _tstatus `uc ]
+[e $UE 143  ]
+[; ;TimeLib.c: 297: }
+"297
+[e :UE 143 ]
 }

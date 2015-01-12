@@ -22,22 +22,26 @@
 /* Stores the day count for each month */
 const unsigned char month_length[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-/* Unix time counter, keeps track of absolute time */
+/* Unix like time counter, keeps track of absolute time */
 time_t sys_time = 0;
 
 /* The interval in seconds after which the system time variable should be updated
- * (synced) with an external time base */
+ * (synced) with an external (accurate) time base */
 time_t sync_interval = 86400;
 
 /* Unix timestamp when the sync should be done. */
 time_t sync_next = 0;
+
+/* Cache for current time */
+time_t tcache;
+struct tm telements;
 
 /* Variable used to keep track of the last time the "seconds" or sys_time counter
  * was updated in "tick" units */
 unsigned long last_update = 0;
 
 /* Keeps the status of the system time (ok, needs sync, not set, etc). */
-enum enTimeStatus enTimeCurrentStatus = E_TIME_NOT_SET;
+enum time_status tstatus = E_TIME_NOT_SET;
 
 /**
  * Stores a pointer to a function that returns a precise unix timestamp to set
@@ -59,6 +63,19 @@ static int time_is_leap(unsigned int year)
 	return((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
 }
 
+/**
+ * Updates the time structure if time has changed
+ *
+ * @param time The timestamp now.-
+ */
+static void time_update(time_t time)
+{
+	if (tcache != time) {
+		tcache = time;
+		time_break(time, &telements);
+	}
+}
+
 /*-------------------------------------------------------------*/
 /*	Public API, check TimeLib.h for documentation		*/
 /*-------------------------------------------------------------*/
@@ -67,7 +84,7 @@ void time_set(time_t now)
 {
 	sys_time = now;
 	sync_next = now + sync_interval;
-	enTimeCurrentStatus = E_TIME_OK;
+	tstatus = E_TIME_OK;
 	last_update = tick_get();
 }
 
@@ -86,7 +103,7 @@ time_t time_get()
 				time_set(now);
 			else {
 				sync_next = sys_time + sync_interval;
-				enTimeCurrentStatus = (enTimeCurrentStatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
+				tstatus = (tstatus == E_TIME_NOT_SET) ? E_TIME_NOT_SET : E_TIME_NEEDS_SYNC;
 			}
 		}
 	}
@@ -102,7 +119,90 @@ time_t time_get()
 	return sys_time;
 }
 
-time_t time_make(struct tm_t * timeinfo)
+uint8_t time_get_status()
+{
+	time_get();
+	return tstatus;
+}
+
+uint8_t time_second_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_sec;
+}
+
+uint8_t time_minute_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_min;
+}
+
+uint8_t time_hour_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_hour;
+}
+
+uint8_t time_wday_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_wday;
+}
+
+uint8_t time_day_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_mday;
+}
+
+uint8_t time_month_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_mon;
+}
+
+uint16_t time_year_t(time_t time)
+{
+	time_update(time);
+	return telements.tm_mon;
+}
+
+uint8_t time_second()
+{
+	return time_second_t(now());
+}
+
+uint8_t time_minute()
+{
+	return time_minute_t(now());
+}
+
+uint8_t time_hour()
+{
+	return time_hour_t(now());
+}
+
+uint8_t time_wday()
+{
+	return time_wday_t(now());
+}
+
+uint8_t time_day()
+{
+	return time_day_t(now());
+}
+
+uint8_t time_month()
+{
+	return time_month_t(now());
+}
+
+uint16_t time_year()
+{
+	return time_year_t(now());
+}
+
+time_t time_make(struct tm * timeinfo)
 {
 	int i;
 	uint32_t tstamp;
@@ -132,34 +232,34 @@ time_t time_make(struct tm_t * timeinfo)
 	return tstamp;
 }
 
-void time_break(time_t timeinput, struct tm_t * timeinfo)
+void time_break(time_t timeinput, struct tm * timeinfo)
 {
 	uint8_t year;
 	uint8_t month, monthLength;
-	uint32_t xTime;
+	uint32_t time;
 	unsigned long days;
 
-	xTime = (uint32_t) timeinput;
-	timeinfo->tm_sec = xTime % 60;
+	time = (uint32_t) timeinput;
+	timeinfo->tm_sec = time % 60;
 
-	xTime /= 60; // now it is minutes
-	timeinfo->tm_min = xTime % 60;
+	time /= 60; // now it is minutes
+	timeinfo->tm_min = time % 60;
 
-	xTime /= 60; // now it is hours
-	timeinfo->tm_hour = xTime % 24;
+	time /= 60; // now it is hours
+	timeinfo->tm_hour = time % 24;
 
-	xTime /= 24; // now it is days
-	timeinfo->tm_wday = ((xTime + 4) % 7) + 1; // Sunday is day 1
+	time /= 24; // now it is days
+	timeinfo->tm_wday = ((time + 4) % 7) + 1; // Sunday is day 1
 
 	year = 0;
 	days = 0;
-	while ((unsigned) (days += (time_is_leap(1970 + year) ? 366 : 365)) <= xTime)
+	while ((unsigned) (days += (time_is_leap(1970 + year) ? 366 : 365)) <= time)
 		year++;
 
 	timeinfo->tm_year = year; // year is offset from 1970
 
 	days -= time_is_leap(1970 + year) ? 366 : 365;
-	xTime -= days; // now it is days in this year, starting at 0
+	time -= days; // now it is days in this year, starting at 0
 
 	days = 0;
 	month = 0;
@@ -176,14 +276,14 @@ void time_break(time_t timeinput, struct tm_t * timeinfo)
 			monthLength = month_length[month];
 		}
 
-		if (xTime >= monthLength) {
-			xTime -= monthLength;
+		if (time >= monthLength) {
+			time -= monthLength;
 		} else {
 			break;
 		}
 	}
 	timeinfo->tm_mon = month + 1; // jan is month 1
-	timeinfo->tm_mday = xTime + 1; // day of month
+	timeinfo->tm_mday = time + 1; // day of month
 }
 
 void time_set_provider(time_callback_t callback, time_t timespan)

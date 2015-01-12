@@ -43,7 +43,7 @@ void main()
 	TRISB = 0b00000100;
 
 	// Structure that holds human readable time information;
-	struct tm_t tinfo;
+	struct tm tinfo;
 
 	// Local time to get
 	time_t now;
@@ -71,16 +71,11 @@ void main()
 	printf("TimeLib Test Program\r\n");
 
 	for (;;) {
-		// Display the time every 5 seconds
+		// Display the time every second
 		if (tick_get() - last > TICK_SECOND) {
-
 			last = tick_get();
-			// Get the timestamp
-			now = time_get();
-			// Convert to human format
-			time_break(now, &tinfo);
 			// Send to serial port
-			printf("Time: %02d:%02d:%02d Date: %02d/%02d/%02d\r\n", tinfo.tm_hour, tinfo.tm_min, tinfo.tm_sec, tinfo.tm_mday, tinfo.tm_mon, tinfo.tm_year);
+			printf("Time: %02d:%02d:%02d Date: %02d/%02d/%02d\r\n", hour(), minute(), second(), day(), month(), year());
 		}
 	}
 
@@ -102,11 +97,11 @@ time_t time_provider()
  */
 void putch(unsigned char data)
 {
-	TXSTA=0x26;
-	RCSTAbits.SPEN=1;
+	TXSTA = 0x26;
+	RCSTAbits.SPEN = 1;
 
 	TXREG = data; // Write to Tx register
-	while( !( PIR1bits.TXIF ) ); // Wait while transmission ends
+	while (!(PIR1bits.TXIF)); // Wait while transmission ends
 }
 
 /**
@@ -115,7 +110,7 @@ void putch(unsigned char data)
  */
 void interrupt isr(void)
 {
-    // Update the system counter
-    tick_update();
-    // Other interrupts can be handled here
+	// Update the system counter
+	tick_update();
+	// Other interrupts can be handled here
 }

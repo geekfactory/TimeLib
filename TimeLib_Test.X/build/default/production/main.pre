@@ -1506,11 +1506,11 @@ uint32_t tick_get();
 # 75
 void tick_update();
 
-# 43 "../TimeLib.h"
+# 44 "../TimeLib.h"
 typedef unsigned long time_t;
 
-
-struct tm_t{
+# 53
+struct tm_t {
 uint8_t tm_sec;
 uint8_t tm_min;
 uint8_t tm_hour;
@@ -1520,30 +1520,51 @@ uint8_t tm_mon;
 uint8_t tm_year;
 };
 
-# 59
-enum enTimeStatus {
+# 66
+enum time_status {
 E_TIME_NOT_SET = 0,
 E_TIME_NEEDS_SYNC,
 E_TIME_OK,
 };
 
-# 67
+# 79
 typedef time_t(* time_callback_t)();
 
-# 85
+# 98
 void time_set(time_t now);
 
-# 97
+# 111
 time_t time_get();
 
-# 111
+# 120
+uint8_t time_second_t(time_t time);
+
+# 129
+uint8_t time_minute_t(time_t time);
+
+# 138
+uint8_t time_hour_t(time_t time);
+
+# 145
+uint8_t time_second();
+
+# 152
+uint8_t time_minute();
+
+# 159
+uint8_t time_hour();
+
+# 173
 time_t time_make(struct tm_t * timeinfo);
 
-# 122
+# 184
 void time_break(time_t timeinput, struct tm_t * timeinfo);
 
-# 136
+# 198
 void time_set_provider(time_callback_t callback, time_t timespan);
+
+# 210
+uint8_t time_get_status();
 
 
 # 20 "main.c"
@@ -1603,7 +1624,7 @@ printf("TimeLib Test Program\r\n");
 for (;;) {
 
 if (tick_get() - last > ((unsigned long long)((1000000 + 128ull)/8ull))) {
-
+time_minute();
 last = tick_get();
 
 now = time_get();
@@ -1626,11 +1647,11 @@ return initialt;
 # 103
 void putch(unsigned char data)
 {
-TXSTA=0x26;
-RCSTAbits.SPEN=1;
+TXSTA = 0x26;
+RCSTAbits.SPEN = 1;
 
 TXREG = data;
-while( !( PIR1bits.TXIF ) );
+while (!(PIR1bits.TXIF));
 }
 
 # 116
