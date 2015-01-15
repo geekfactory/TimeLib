@@ -1,8 +1,8 @@
 #include "TimeLib.h"
 
 // Structure that holds human readable time information;
-struct tm_t tinfo;
-// Local time to get
+struct tm tinfo;
+
 time_t now, initialt;
 // Store last time we sent the information
 uint32_t last = 0;
@@ -26,8 +26,6 @@ void setup()
 	time_set(initialt);
 	// Configure the library to update every day
 	time_set_provider(time_provider, TIME_SECS_PER_DAY);
-	// initialize digital pin 13 as an output.
-	pinMode(13, OUTPUT);
 }
 
 void loop()

@@ -70,6 +70,8 @@ void main()
 
 	printf("TimeLib Test Program\r\n");
 
+	E_
+
 	for (;;) {
 		// Display the time every second
 		if (tick_get() - last > TICK_SECOND) {

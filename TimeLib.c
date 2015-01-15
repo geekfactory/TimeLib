@@ -79,7 +79,6 @@ static void time_update(time_t time)
 /*-------------------------------------------------------------*/
 /*	Public API, check TimeLib.h for documentation		*/
 /*-------------------------------------------------------------*/
-
 void time_set(time_t now)
 {
 	sys_time = now;

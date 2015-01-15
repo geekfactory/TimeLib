@@ -41,7 +41,7 @@
 /*		Typedefs enums & structs			*/
 /*-------------------------------------------------------------*/
 #if !defined(__time_t_defined)
-typedef unsigned long time_t;
+typedef uint32_t time_t;
 #endif
 
 /**
@@ -51,13 +51,13 @@ typedef unsigned long time_t;
  * to the standard C structure for time information.
  */
 struct tm {
-	uint8_t tm_sec;
-	uint8_t tm_min;
-	uint8_t tm_hour;
-	uint8_t tm_wday; // day of week, sunday is day 1
-	uint8_t tm_mday;
-	uint8_t tm_mon;
-	uint8_t tm_year; // offset from 1970;
+	uint8_t tm_sec; //!< Seconds
+	uint8_t tm_min; //!< Minutes
+	uint8_t tm_hour; //!< Hours
+	uint8_t tm_wday; //!< Day of week, sunday is day 1
+	uint8_t tm_mday; //!<  Day of the month
+	uint8_t tm_mon; //!< Month
+	uint8_t tm_year; //!< Year offset from 1970;
 };
 
 /**
@@ -88,7 +88,7 @@ extern "C" {
 	 * @brief Sets the current system time
 	 *
 	 * This function sets the time keeping system variable to the given value.
-	 * The time is stored and mantained as an integral value representing the
+	 * The time is stored and mantained as an integer value representing the
 	 * number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix
 	 * timestamp).
 	 *
@@ -101,7 +101,7 @@ extern "C" {
 	 * @brief Gets the current system time
 	 *
 	 * This function reads the value of the time keeping system variable.
-	 * The time is stored and mantained as an integral value representing the
+	 * The time is stored and mantained as an integer value representing the
 	 * number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix
 	 * timestamp).
 	 *
@@ -118,12 +118,12 @@ extern "C" {
 	 *
 	 * See enumeration time_status for details about return codes
 	 *
-	 * @return Returns a code that determines the TimeLib status.
+	 * @return Returns a code that determines the time status.
 	 */
 	uint8_t time_get_status();
 
 	/**
-	 * @brief Compute the second at a given timestamp
+	 * Compute the second at a given timestamp
 	 *
 	 * @param time The timestamp to calculate the second for
 	 *
@@ -132,7 +132,7 @@ extern "C" {
 	uint8_t time_second_t(time_t time);
 
 	/**
-	 * @brief Compute the minute at a given timestamp
+	 * Compute the minute at a given timestamp
 	 *
 	 * @param time The timestamp to calculate the minute for
 	 *
@@ -141,84 +141,96 @@ extern "C" {
 	uint8_t time_minute_t(time_t time);
 
 	/**
-	 * @brief Compute the minute at a givent timestamp
+	 * Compute the hour at a given timestamp
 	 *
 	 * @param time The timestamp to calculate the hour for
 	 *
-	 * @return
+	 * @return The elapsed hours
 	 */
 	uint8_t time_hour_t(time_t time);
 
 	/**
+	 * Compute the day of the week at a given timestamp
 	 *
-	 * @param time
-	 * @return
+	 * @param time The timestamp to calculate the day of the week for
+	 *
+	 * @return The day of the week (1-7)
 	 */
 	uint8_t time_wday_t(time_t time);
 
 	/**
+	 * Compute the day of the month at a given timestamp
 	 *
-	 * @param time
-	 * @return
+	 * @param time The timestamp to calculate the day of the month for
+	 *
+	 * @return The day of the month (1-31)
 	 */
 	uint8_t time_day_t(time_t time);
 
 	/**
+	 * Compute the month at a given timestamp
 	 *
-	 * @param time
-	 * @return
+	 * @param time The timestamp to calculate the month for
+	 *
+	 * @return The month (1-12)
 	 */
 	uint8_t time_month_t(time_t time);
 
 	/**
+	 * Compute the year at a given timestamp
 	 *
-	 * @param time
-	 * @return
+	 * @param time The timestamp to calculate the year for
+	 *
+	 * @return The year (1970 - 201X).
 	 */
-	uint8_t time_year_t(time_t time);
+	uint16_t time_year_t(time_t time);
 
 	/**
-	 * @brief Gets the current second
+	 * Gets the current second
 	 *
-	 * @return
+	 * @return The elapsed seconds
 	 */
 	uint8_t time_second();
 
 	/**
-	 * @brief Gets the current minute
+	 * Gets the current minute
 	 *
-	 * @return
+	 * @return The elapsed minutes
 	 */
 	uint8_t time_minute();
 
 	/**
-	 * @brief Gets the current hour
+	 * Gets the current hour
 	 *
-	 * @return
+	 * @return The elapsed hours
 	 */
 	uint8_t time_hour();
 
 	/**
-	 * 
-	 * @return
+	 * Compute the current day of the week
+	 *
+	 * @return The day of the week (1-7)
 	 */
 	uint8_t time_wday();
 
 	/**
+	 * Compute the current day of the month
 	 *
-	 * @return
+	 * @return The day of the month (1-31)
 	 */
 	uint8_t time_day();
 
 	/**
+	 * Compute the current month
 	 *
-	 * @return
+	 * @return The month (1-12)
 	 */
 	uint8_t time_month();
 
 	/**
+	 * Compute the current year
 	 *
-	 * @return
+	 * @return The year (1970 - 201X)
 	 */
 	uint16_t time_year();
 
@@ -228,6 +240,8 @@ extern "C" {
 	 * This function generates the corresponding Unix timestamp for the provided
 	 * date and time information. The timestamp is an integral value representing
 	 * the number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC.
+	 *
+	 * See tm structure fore more details about each struct field.
 	 *
 	 * @param timeinfo A structure containing the human readable elements of the
 	 * date and time to convert to a UNIX timestamp.
@@ -274,44 +288,54 @@ extern "C" {
 #define now()		time_get()
 
 /**
- * @brief Alias for time_second() function
+ * Alias for time_second() function
  */
 #define second()	time_second()
 
 /**
- * @brief Alias for time_minute() function
+ * Alias for time_minute() function
  */
 #define minute()	time_minute()
 
 /**
- * @brief Alias for time_hour() function
+ * Alias for time_hour() function
  */
 #define hour()		time_hour()
 
 /**
- * @brief Alias for time_wday() function
+ * Alias for time_wday() function
  */
 #define wday()		time_wday()
 
 /**
- * @brief Alias for time_day() function
+ *  Alias for time_day() function
  */
 #define day()		time_day()
 
 /**
- * @brief Alias for time_month() function
+ * Alias for time_month() function
  */
 #define month()		time_month()
 
 /**
- * @brief Alias for time_year() function
+ * Alias for time_year() function
  */
 #define year()		time_year()
 
 /**
- * Computes the day of the week. Sunday is day 0 and saturday is 6
+ * Converts year in tm struct to calendar year
  */
-#define time_dow(t)		((t / TIME_SECS_PER_DAY + 4) % TIME_DAYS_PER_WEEK)
+#define time_tm2calendar(y)	((y)+1970)
+
+/**
+ * Converts calendar year to tm struct year
+ */
+#define time_calendar2tm(y)	((y)-1970)
+
+/**
+ * Computes the day of the week. Sunday is day 1 and saturday is 7
+ */
+#define time_dow(t)		(((t / TIME_SECS_PER_DAY + 4) % TIME_DAYS_PER_WEEK)+1)
 
 /**
  * Computes the number of elapsed days for the given timestamp
@@ -324,27 +348,27 @@ extern "C" {
 #define time_seconds_today(t)	(t % TIME_SECS_PER_DAY)
 
 /**
- * @brief Calculates the timestamp of the previous midnight for the given time
+ * Calculates the timestamp of the previous midnight for the given time
  */
 #define time_prev_midnight(t)	(uint32_t)(( (uint32_t)t / (uint32_t)TIME_SECS_PER_DAY) * (uint32_t)TIME_SECS_PER_DAY)
 
 /**
- * @brief Calculates the timestamo of the next midnight for the given time
+ * Calculates the timestamp of the next midnight for the given time
  */
 #define time_next_midnight(t)	(time_prev_midnight(t) + TIME_SECS_PER_DAY)
 
 /**
- * @brief Calculates the number of seconds elapsed since the start of the week
+ * Calculates the number of seconds elapsed since the start of the week
  */
-#define time_secs_this_week(t)	(time_seconds_today(t) + ((time_dow(t)) * TIME_SECS_PER_DAY))
+#define time_secs_this_week(t)	(time_seconds_today(t) + ((time_dow(t)-1) * TIME_SECS_PER_DAY))
 
 /**
- * @brief Calculates the timestamp at the begining of the last sunday
+ * Calculates the timestamp at mindnight of the last sunday
  */
 #define time_prev_sunday(t)	(t - time_seconds_this_week(t))
 
 /**
- * @brief Calculates the timestamp at the begining of the next sunday
+ * Calculates the timestamp at the begining of the next sunday
  */
 #define time_next_sunday(t)	(time_prev_sunday(t)+TIME_SECS_PER_WEEK)
 
