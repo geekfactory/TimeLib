@@ -333,6 +333,16 @@ extern "C" {
 #define time_calendar2tm(y)	((y)-1970)
 
 /**
+ * Converts tm struct year to year 2000 based time
+ */
+#define time_tm2y2k(y)		((y)-30)
+
+/**
+ * Converts year 2000 to tm struct year
+ */
+#define time_y2k2tm(y)		((y)+30)
+
+/**
  * Computes the day of the week. Sunday is day 1 and saturday is 7
  */
 #define time_dow(t)		(((t / TIME_SECS_PER_DAY + 4) % TIME_DAYS_PER_WEEK)+1)
@@ -365,7 +375,7 @@ extern "C" {
 /**
  * Calculates the timestamp at mindnight of the last sunday
  */
-#define time_prev_sunday(t)	(t - time_seconds_this_week(t))
+#define time_prev_sunday(t)	(t - time_secs_this_week(t))
 
 /**
  * Calculates the timestamp at the begining of the next sunday
