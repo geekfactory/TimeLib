@@ -24,6 +24,7 @@
 
 #include <xc.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #elif defined( PLIB_AVR )
 

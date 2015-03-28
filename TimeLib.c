@@ -19,6 +19,9 @@
  */
 #include "TimeLib.h"
 
+/* Flag used to "freeze" the clock value */
+bool halt = false;
+
 /* Stores the day count for each month */
 const unsigned char month_length[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
@@ -66,7 +69,7 @@ static int time_is_leap(unsigned int year)
 /**
  * Updates the time structure if time has changed
  *
- * @param time The timestamp now.-
+ * @param time The timestamp now.
  */
 static void time_update(time_t time)
 {
@@ -90,6 +93,10 @@ void time_set(time_t now)
 time_t time_get()
 {
 	time_t now = 0;
+
+	// Clock halted, return always the same value (no update)
+	if(halt==true)
+		return sys_time;
 
 	// Check if time needs sync to timebase
 	if (sync_next <= sys_time) {
@@ -116,6 +123,16 @@ time_t time_get()
 	}
 
 	return sys_time;
+}
+
+void time_halt_clock()
+{
+	halt = true;
+}
+
+void time_resume_clock()
+{
+	halt = false;
 }
 
 uint8_t time_get_status()
@@ -168,37 +185,37 @@ uint16_t time_year_t(time_t time)
 
 uint8_t time_second()
 {
-	return time_second_t(now());
+	return time_second_t(time_get());
 }
 
 uint8_t time_minute()
 {
-	return time_minute_t(now());
+	return time_minute_t(time_get());
 }
 
 uint8_t time_hour()
 {
-	return time_hour_t(now());
+	return time_hour_t(time_get());
 }
 
 uint8_t time_wday()
 {
-	return time_wday_t(now());
+	return time_wday_t(time_get());
 }
 
 uint8_t time_day()
 {
-	return time_day_t(now());
+	return time_day_t(time_get());
 }
 
 uint8_t time_month()
 {
-	return time_month_t(now());
+	return time_month_t(time_get());
 }
 
 uint16_t time_year()
 {
-	return time_year_t(now());
+	return time_year_t(time_get());
 }
 
 time_t time_make(struct tm * timeinfo)

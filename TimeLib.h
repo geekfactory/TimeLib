@@ -111,6 +111,21 @@ extern "C" {
 	time_t time_get();
 
 	/**
+	 * @brief Stops the time counter
+	 *
+	 * This function is intended to temporary stop the operation of the system
+	 * clock, however the underliying time base operates normaly.
+	 */
+	void time_halt_clock();
+
+	/**
+	 * @brief Starts the time counter
+	 *
+	 * This function resumes the normal operation of the system clock.
+	 */
+	void time_resume_clock();
+
+	/**
 	 * @brief Gets the status of the system time
 	 *
 	 * This function helps the application to determine if the system time is
