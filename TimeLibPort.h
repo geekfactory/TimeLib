@@ -28,7 +28,8 @@
 
 #elif defined( PLIB_AVR )
 
-#include <stdint.h">
+#include <stdint.h>
+#include <stdbool.h>
 
 #elif defined( ARDUINO )
 
@@ -39,6 +40,7 @@
 #endif
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define TICKS_PER_SECOND    1000ull
 #define TICK_SECOND	((unsigned long long)TICKS_PER_SECOND)

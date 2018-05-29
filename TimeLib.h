@@ -24,7 +24,12 @@
 /*		Includes and dependencies			*/
 /*-------------------------------------------------------------*/
 #include "TimeLibPort.h"
-#include "Tick/Tick.h"
+//#include "Tick/Tick.h"
+
+/*-------------------------------------------------------------*/
+/*		Library configuration				*/
+/*-------------------------------------------------------------*/
+#define TIMELIB_VERSION_STRING     "1.0.0"
 
 /*-------------------------------------------------------------*/
 /*		Macros and definitions				*/
@@ -51,12 +56,12 @@ typedef uint32_t time_t;
  * to the standard C structure for time information.
  */
 struct tm {
-	uint8_t tm_sec; //!< Seconds
-	uint8_t tm_min; //!< Minutes
+	uint8_t tm_sec;  //!< Seconds
+	uint8_t tm_min;  //!< Minutes
 	uint8_t tm_hour; //!< Hours
 	uint8_t tm_wday; //!< Day of week, sunday is day 1
-	uint8_t tm_mday; //!<  Day of the month
-	uint8_t tm_mon; //!< Month
+	uint8_t tm_mday; //!< Day of the month
+	uint8_t tm_mon;  //!< Month
 	uint8_t tm_year; //!< Year offset from 1970;
 };
 
@@ -305,37 +310,37 @@ extern "C" {
 /**
  * Alias for time_second() function
  */
-#define second()	time_second()
+#define tlsecond()	time_second()
 
 /**
  * Alias for time_minute() function
  */
-#define minute()	time_minute()
+#define tlminute()	time_minute()
 
 /**
  * Alias for time_hour() function
  */
-#define hour()		time_hour()
+#define tlhour()		time_hour()
 
 /**
  * Alias for time_wday() function
  */
-#define wday()		time_wday()
+#define tlwday()		time_wday()
 
 /**
  *  Alias for time_day() function
  */
-#define day()		time_day()
+#define tlday()		time_day()
 
 /**
  * Alias for time_month() function
  */
-#define month()		time_month()
+#define tlmonth()		time_month()
 
 /**
  * Alias for time_year() function
  */
-#define year()		time_year()
+#define tlyear()		time_year()
 
 /**
  * Converts year in tm struct to calendar year
