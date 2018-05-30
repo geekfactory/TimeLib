@@ -1,4 +1,4 @@
-/*	Time management library for embedded devices
+/*	TimeLib - Time management library for embedded devices
 	Copyright (C) 2014 Jesus Ruben Santa Anna Zamudio.
 
 	This program is free software: you can redistribute it and/or modify
@@ -24,29 +24,28 @@
 /*		Includes and dependencies			*/
 /*-------------------------------------------------------------*/
 #include "TimeLibPort.h"
-//#include "Tick/Tick.h"
 
 /*-------------------------------------------------------------*/
 /*		Library configuration				*/
 /*-------------------------------------------------------------*/
-#define TIMELIB_VERSION_STRING     "1.0.0"
+#define TIMELIB_VERSION_STRING		"1.1.0"
 
 /*-------------------------------------------------------------*/
 /*		Macros and definitions				*/
 /*-------------------------------------------------------------*/
-#define TIME_SECS_PER_DAY		(86400UL)
-#define TIME_SECS_PER_HOUR		(3600UL)
-#define TIME_SECS_PER_MINUTE            (60UL)
-#define TIME_DAYS_PER_WEEK		(7UL)
-#define TIME_SECS_PER_WEEK		(TIME_SECS_PER_DAY * TIME_DAYS_PER_WEEK)
-#define TIME_SECS_PER_YEAR              (TIME_SECS_PER_WEEK * 52UL)
-#define TIME_SECS_YEAR_2K               (946684800UL)
+#define TIMELIB_SECS_PER_DAY		(86400UL)
+#define TIMELIB_SECS_PER_HOUR		(3600UL)
+#define TIMELIB_SECS_PER_MINUTE		(60UL)
+#define TIMELIB_DAYS_PER_WEEK		(7UL)
+#define TIMELIB_SECS_PER_WEEK		(TIMELIB_SECS_PER_DAY * TIMELIB_DAYS_PER_WEEK)
+#define TIMELIB_SECS_PER_YEAR		(TIMELIB_SECS_PER_WEEK * 52UL)
+#define TIMELIB_SECS_YEAR_2K		(946684800UL)
 
 /*-------------------------------------------------------------*/
 /*		Typedefs enums & structs			*/
 /*-------------------------------------------------------------*/
 #if !defined(__time_t_defined)
-typedef uint32_t time_t;
+typedef uint32_t timelib_t;
 #endif
 
 /**
@@ -56,12 +55,12 @@ typedef uint32_t time_t;
  * to the standard C structure for time information.
  */
 struct tm {
-	uint8_t tm_sec;  //!< Seconds
-	uint8_t tm_min;  //!< Minutes
+	uint8_t tm_sec; //!< Seconds
+	uint8_t tm_min; //!< Minutes
 	uint8_t tm_hour; //!< Hours
 	uint8_t tm_wday; //!< Day of week, sunday is day 1
 	uint8_t tm_mday; //!< Day of the month
-	uint8_t tm_mon;  //!< Month
+	uint8_t tm_mon; //!< Month
 	uint8_t tm_year; //!< Year offset from 1970;
 };
 
@@ -81,7 +80,7 @@ enum time_status {
  * GPS, NTP, RTC, etc. This is needed to automatically sync time with
  * an external source.
  */
-typedef time_t(* time_callback_t)();
+typedef timelib_t(* timelib_callback_t)();
 
 /*-------------------------------------------------------------*/
 /*		Function prototypes				*/
@@ -100,7 +99,7 @@ extern "C" {
 	 * @param now Unix timestamp representing the number of seconds elapsed since
 	 * 00:00 hours, Jan 1, 1970 UTC to the present date.
 	 */
-	void time_set(time_t now);
+	void timelib_set(timelib_t now);
 
 	/**
 	 * @brief Gets the current system time
@@ -113,7 +112,7 @@ extern "C" {
 	 * @return A Unix timestamp representing the number of seconds elapsed since
 	 * 00:00 hours, Jan 1, 1970 UTC to the present date.
 	 */
-	time_t time_get();
+	timelib_t timelib_get();
 
 	/**
 	 * @brief Stops the time counter
@@ -121,14 +120,14 @@ extern "C" {
 	 * This function is intended to temporary stop the operation of the system
 	 * clock, however the underliying time base operates normaly.
 	 */
-	void time_halt_clock();
+	void timelib_halt_clock();
 
 	/**
 	 * @brief Starts the time counter
 	 *
 	 * This function resumes the normal operation of the system clock.
 	 */
-	void time_resume_clock();
+	void timelib_resume_clock();
 
 	/**
 	 * @brief Gets the status of the system time
@@ -140,7 +139,7 @@ extern "C" {
 	 *
 	 * @return Returns a code that determines the time status.
 	 */
-	uint8_t time_get_status();
+	uint8_t timelib_get_status();
 
 	/**
 	 * Compute the second at a given timestamp
@@ -149,7 +148,7 @@ extern "C" {
 	 *
 	 * @return The elapsed seconds
 	 */
-	uint8_t time_second_t(time_t time);
+	uint8_t timelib_second_t(timelib_t time);
 
 	/**
 	 * Compute the minute at a given timestamp
@@ -158,7 +157,7 @@ extern "C" {
 	 *
 	 * @return The elapsed minutes
 	 */
-	uint8_t time_minute_t(time_t time);
+	uint8_t timelib_minute_t(timelib_t time);
 
 	/**
 	 * Compute the hour at a given timestamp
@@ -167,7 +166,7 @@ extern "C" {
 	 *
 	 * @return The elapsed hours
 	 */
-	uint8_t time_hour_t(time_t time);
+	uint8_t timelib_hour_t(timelib_t time);
 
 	/**
 	 * Compute the day of the week at a given timestamp
@@ -176,7 +175,7 @@ extern "C" {
 	 *
 	 * @return The day of the week (1-7)
 	 */
-	uint8_t time_wday_t(time_t time);
+	uint8_t timelib_wday_t(timelib_t time);
 
 	/**
 	 * Compute the day of the month at a given timestamp
@@ -185,7 +184,7 @@ extern "C" {
 	 *
 	 * @return The day of the month (1-31)
 	 */
-	uint8_t time_day_t(time_t time);
+	uint8_t timelib_day_t(timelib_t time);
 
 	/**
 	 * Compute the month at a given timestamp
@@ -194,7 +193,7 @@ extern "C" {
 	 *
 	 * @return The month (1-12)
 	 */
-	uint8_t time_month_t(time_t time);
+	uint8_t timelib_month_t(timelib_t time);
 
 	/**
 	 * Compute the year at a given timestamp
@@ -203,56 +202,56 @@ extern "C" {
 	 *
 	 * @return The year (1970 - 201X).
 	 */
-	uint16_t time_year_t(time_t time);
+	uint16_t timelib_year_t(timelib_t time);
 
 	/**
 	 * Gets the current second
 	 *
 	 * @return The elapsed seconds
 	 */
-	uint8_t time_second();
+	uint8_t timelib_second();
 
 	/**
 	 * Gets the current minute
 	 *
 	 * @return The elapsed minutes
 	 */
-	uint8_t time_minute();
+	uint8_t timelib_minute();
 
 	/**
 	 * Gets the current hour
 	 *
 	 * @return The elapsed hours
 	 */
-	uint8_t time_hour();
+	uint8_t timelib_hour();
 
 	/**
 	 * Compute the current day of the week
 	 *
 	 * @return The day of the week (1-7)
 	 */
-	uint8_t time_wday();
+	uint8_t timelib_wday();
 
 	/**
 	 * Compute the current day of the month
 	 *
 	 * @return The day of the month (1-31)
 	 */
-	uint8_t time_day();
+	uint8_t timelib_day();
 
 	/**
 	 * Compute the current month
 	 *
 	 * @return The month (1-12)
 	 */
-	uint8_t time_month();
+	uint8_t timelib_month();
 
 	/**
 	 * Compute the current year
 	 *
 	 * @return The year (1970 - 201X)
 	 */
-	uint16_t time_year();
+	uint16_t timelib_year();
 
 	/**
 	 * @brief Generates a Unix Timestamp from the given time/date components
@@ -268,7 +267,7 @@ extern "C" {
 	 *
 	 * @return The UNIX Timestamp for the given time/date components
 	 */
-	time_t time_make(struct tm * timeinfo);
+	timelib_t timelib_make(struct tm * timeinfo);
 
 	/**
 	 * @brief Get human readable time from Unix time
@@ -279,7 +278,7 @@ extern "C" {
 	 * @param timeinput The timestamp to convert
 	 * @param timeinfo Pointer to tm structure to strore the resuling time
 	 */
-	void time_break(time_t timeinput, struct tm * timeinfo);
+	void timelib_break(timelib_t timeinput, struct tm * timeinfo);
 
 	/**
 	 * @brief Sets the callback function that obtains precise time
@@ -293,7 +292,7 @@ extern "C" {
 	 *
 	 * @param timespan The interval in seconds when this function should be called
 	 */
-	void time_set_provider(time_callback_t callback, time_t timespan);
+	void timelib_set_provider(timelib_callback_t callback, timelib_t timespan);
 
 #ifdef	__cplusplus
 }
@@ -305,102 +304,102 @@ extern "C" {
 /**
  * Alias for time_get() function
  */
-#define now()		time_get()
+#define tlnow()		timelib_get()
 
 /**
  * Alias for time_second() function
  */
-#define tlsecond()	time_second()
+#define tlsecond()	timelib_second()
 
 /**
  * Alias for time_minute() function
  */
-#define tlminute()	time_minute()
+#define tlminute()	timelib_minute()
 
 /**
  * Alias for time_hour() function
  */
-#define tlhour()		time_hour()
+#define tlhour()	timelib_hour()
 
 /**
  * Alias for time_wday() function
  */
-#define tlwday()		time_wday()
+#define tlwday()	timelib_wday()
 
 /**
  *  Alias for time_day() function
  */
-#define tlday()		time_day()
+#define tlday()		timelib_day()
 
 /**
  * Alias for time_month() function
  */
-#define tlmonth()		time_month()
+#define tlmonth()	timelib_month()
 
 /**
  * Alias for time_year() function
  */
-#define tlyear()		time_year()
+#define tlyear()	timelib_year()
 
 /**
  * Converts year in tm struct to calendar year
  */
-#define time_tm2calendar(y)	((y)+1970)
+#define timelib_tm2calendar(y)	((y)+1970)
 
 /**
  * Converts calendar year to tm struct year
  */
-#define time_calendar2tm(y)	((y)-1970)
+#define timelib_calendar2tm(y)	((y)-1970)
 
 /**
  * Converts tm struct year to year 2000 based time
  */
-#define time_tm2y2k(y)		((y)-30)
+#define timelib_tm2y2k(y)	((y)-30)
 
 /**
  * Converts year 2000 to tm struct year
  */
-#define time_y2k2tm(y)		((y)+30)
+#define timelib_y2k2tm(y)	((y)+30)
 
 /**
  * Computes the day of the week. Sunday is day 1 and saturday is 7
  */
-#define time_dow(t)		(((t / TIME_SECS_PER_DAY + 4) % TIME_DAYS_PER_WEEK)+1)
+#define timelib_dow(t)		(((t / TIMELIB_SECS_PER_DAY + 4) % TIMELIB_DAYS_PER_WEEK)+1)
 
 /**
  * Computes the number of elapsed days for the given timestamp
  */
-#define time_elapsed_days(t)	(t / TIME_SECS_PER_DAY)
+#define timelib_elapsed_days(t)		(t / TIMELIB_SECS_PER_DAY)
 
 /**
  * Computes the number of elapsed seconds since midnight today
  */
-#define time_seconds_today(t)	(t % TIME_SECS_PER_DAY)
+#define timelib_seconds_today(t)	(t % TIMELIB_SECS_PER_DAY)
 
 /**
  * Calculates the timestamp of the previous midnight for the given time
  */
-#define time_prev_midnight(t)	(uint32_t)(( (uint32_t)t / (uint32_t)TIME_SECS_PER_DAY) * (uint32_t)TIME_SECS_PER_DAY)
+#define timelib_prev_midnight(t)	(uint32_t)(( (uint32_t)t / (uint32_t)TIMELIB_SECS_PER_DAY) * (uint32_t)TIMELIB_SECS_PER_DAY)
 
 /**
  * Calculates the timestamp of the next midnight for the given time
  */
-#define time_next_midnight(t)	(time_prev_midnight(t) + TIME_SECS_PER_DAY)
+#define timelib_next_midnight(t)	(timelib_prev_midnight(t) + TIMELIB_SECS_PER_DAY)
 
 /**
  * Calculates the number of seconds elapsed since the start of the week
  */
-#define time_secs_this_week(t)	(time_seconds_today(t) + ((time_dow(t)-1) * TIME_SECS_PER_DAY))
+#define timelib_secs_this_week(t)	(timelib_seconds_today(t) + ((timelib_dow(t)-1) * TIMELIB_SECS_PER_DAY))
 
 /**
  * Calculates the timestamp at mindnight of the last sunday
  */
-#define time_prev_sunday(t)	(t - time_secs_this_week(t))
+#define timelib_prev_sunday(t)		(t - timelib_secs_this_week(t))
 
 /**
  * Calculates the timestamp at the begining of the next sunday
  */
-#define time_next_sunday(t)	(time_prev_sunday(t)+TIME_SECS_PER_WEEK)
+#define timelib_next_sunday(t)		(timelib_prev_sunday(t)+TIMELIB_SECS_PER_WEEK)
 
 #endif
 // End of Header file

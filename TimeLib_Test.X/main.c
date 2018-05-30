@@ -32,9 +32,9 @@
 #pragma config IESO = OFF       // Internal External Switchover bit (Internal External Switchover mode disabled)
 
 // Initial timestamp, make it global so we can use it with update function
-time_t initialt;
+timelib_t initialt;
 // Time provider function
-time_t time_provider();
+timelib_t time_provider();
 
 void main()
 {
@@ -46,7 +46,7 @@ void main()
 	struct tm tinfo;
 
 	// Local time to get
-	time_t now;
+	timelib_t now;
 
 	// Store last time we sent the information
 	uint32_t last = 0;
@@ -62,11 +62,11 @@ void main()
 	// Tick Initialization
 	tick_init();
 	// Convert time structure to timestamp
-	initialt = time_make(&tinfo);
+	initialt = timelib_make(&tinfo);
 	// Set system time counter
-	time_set(initialt);
+	timelib_set(initialt);
 	// Set the function to get accurate time
-	time_set_provider(&time_provider, TIME_SECS_PER_DAY);
+	timelib_set_provider(&time_provider, TIMELIB_SECS_PER_DAY);
 
 	printf("TimeLib Test Program\r\n");
 
@@ -83,7 +83,7 @@ void main()
 
 }
 
-time_t time_provider()
+timelib_t time_provider()
 {
 	/* Return precise time information: This function should query a precise
 	 * time reference such as: GPS, NTP or Real time clock for demo purposes
