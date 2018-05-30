@@ -28,7 +28,18 @@
 /*-------------------------------------------------------------*
  *		Library configuration				*
  *-------------------------------------------------------------*/
+
+/**
+ * Version string, should be changed in every release
+ */
 #define TIMELIB_VERSION_STRING		"1.1.0"
+
+/**
+ * Enable function calls with names from version 1.0.0. Names where changed on
+ * 1.1.0 to adhere to naming conventions. Define this macro to enable macros that 
+ * allow us to use old function names comment it to use only new API names.
+ */
+#define CONFIG_TIMELIB_LEGACY_API
 
 /*-------------------------------------------------------------*
  *		Macros and definitions				*
@@ -304,7 +315,7 @@ extern "C" {
 /**
  * Alias for time_get() function
  */
-#define tlnow()		timelib_get()
+#define now()		timelib_get()
 
 /**
  * Alias for time_second() function
@@ -400,6 +411,58 @@ extern "C" {
  * Calculates the timestamp at the beginning of the next Sunday
  */
 #define timelib_next_sunday(t)		(timelib_prev_sunday(t)+TIMELIB_SECS_PER_WEEK)
+
+/*-------------------------------------------------------------*
+ *		Legacy API macros				*
+ *-------------------------------------------------------------*/
+#if defined(CONFIG_TIMELIB_LEGACY_API)
+
+typedef uint32_t time_t;
+
+#define TIME_SECS_PER_DAY		TIMELIB_SECS_PER_DAY
+#define TIME_SECS_PER_HOUR		TIMELIB_SECS_PER_HOUR
+#define TIME_SECS_PER_MINUTE		TIMELIB_SECS_PER_MINUTE
+#define TIME_DAYS_PER_WEEK		TIMELIB_DAYS_PER_WEEK
+#define TIME_SECS_PER_WEEK		TIMELIB_SECS_PER_WEEK
+#define TIME_SECS_PER_YEAR		TIMELIB_SECS_PER_YEAR
+#define TIME_SECS_YEAR_2K		TIMELIB_SECS_YEAR_2K
+
+#define time_set(x)		timelib_set(x)
+#define time_get()		timelib_get()
+#define time_halt_clock()	timelib_halt_clock()
+#define time_resume_clock()	timelib_resume_clock()
+#define time_get_status()	timelib_get_status()
+#define time_second_t(x)	timelib_second_t(x)
+#define time_minute_t(x)	timelib_minute_t(x)
+#define time_hour_t(x)		timelib_hour_t(x)
+#define time_wday_t(x)		timelib_wday_t(x)
+#define time_day_t(x)		timelib_day_t(x)
+#define time_month_t(x)		timelib_month_t(x)
+#define time_year_t(x)		timelib_year_t(x)
+#define time_second()		timelib_second()
+#define time_minute()		timelib_minute()
+#define time_hour()		timelib_hour()
+#define time_wday()		timelib_wday()
+#define time_day()		timelib_day()
+#define time_month()		timelib_month()
+#define time_year()		timelib_year()
+#define time_make(x)		timelib_make(x)
+#define time_break(x,y)		timelib_break(x,y)
+#define time_set_provider(x,y)	timelib_set_provider(x,y)
+#define time_tm2calendar(x)	timelib_tm2calendar(x)
+#define time_calendar2tm(x)	timelib_calendar2tm(x)
+#define time_tm2y2k(x)		timelib_tm2y2k(x)
+#define time_y2k2tm(x)		timelib_y2k2tm(x)
+#define time_dow(x)		timelib_dow(x)
+#define time_elapsed_days(x)	timelib_elapsed_days(x)
+#define time_seconds_today(x)	timelib_seconds_today(x)
+#define time_prev_midnight(x)	timelib_prev_midnight(x)
+#define time_next_midnight(x)	timelib_next_midnight(x)
+#define time_secs_this_week(x)	timelib_secs_this_week(x)
+#define time_prev_sunday(x)	timelib_prev_sunday(x)
+#define time_next_sunday(x)	timelib_next_sunday(x)
+
+#endif
 
 #endif
 // End of Header file
