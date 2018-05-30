@@ -20,19 +20,19 @@
 #ifndef TIMELIB_H
 #define TIMELIB_H
 
-/*-------------------------------------------------------------*/
-/*		Includes and dependencies			*/
-/*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*
+ *		Includes and dependencies			*
+ *-------------------------------------------------------------*/
 #include "TimeLibPort.h"
 
-/*-------------------------------------------------------------*/
-/*		Library configuration				*/
-/*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*
+ *		Library configuration				*
+ *-------------------------------------------------------------*/
 #define TIMELIB_VERSION_STRING		"1.1.0"
 
-/*-------------------------------------------------------------*/
-/*		Macros and definitions				*/
-/*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*
+ *		Macros and definitions				*
+ *-------------------------------------------------------------*/
 #define TIMELIB_SECS_PER_DAY		(86400UL)
 #define TIMELIB_SECS_PER_HOUR		(3600UL)
 #define TIMELIB_SECS_PER_MINUTE		(60UL)
@@ -41,9 +41,9 @@
 #define TIMELIB_SECS_PER_YEAR		(TIMELIB_SECS_PER_WEEK * 52UL)
 #define TIMELIB_SECS_YEAR_2K		(946684800UL)
 
-/*-------------------------------------------------------------*/
-/*		Typedefs enums & structs			*/
-/*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*
+ *		Typedefs enums & structs			*
+ *-------------------------------------------------------------*/
 #if !defined(__time_t_defined)
 typedef uint32_t timelib_t;
 #endif
@@ -74,7 +74,7 @@ enum time_status {
 };
 
 /**
- * @brief Type definiton for the funtion pointer that gets precise time
+ * @brief Type definition for the function pointer that gets precise time
  * 
  * Pointer to function that gets time from external time source or device:
  * GPS, NTP, RTC, etc. This is needed to automatically sync time with
@@ -82,9 +82,9 @@ enum time_status {
  */
 typedef timelib_t(* timelib_callback_t)();
 
-/*-------------------------------------------------------------*/
-/*		Function prototypes				*/
-/*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*
+ *		Function prototypes				*
+ *-------------------------------------------------------------*/
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -92,8 +92,8 @@ extern "C" {
 	 * @brief Sets the current system time
 	 *
 	 * This function sets the time keeping system variable to the given value.
-	 * The time is stored and mantained as an integer value representing the
-	 * number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix
+	 * The time is stored and maintained as an integer value representing the
+	 * number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a Unix
 	 * timestamp).
 	 *
 	 * @param now Unix timestamp representing the number of seconds elapsed since
@@ -105,8 +105,8 @@ extern "C" {
 	 * @brief Gets the current system time
 	 *
 	 * This function reads the value of the time keeping system variable.
-	 * The time is stored and mantained as an integer value representing the
-	 * number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a unix
+	 * The time is stored and maintained as an integer value representing the
+	 * number of seconds elapsed since 00:00 hours, Jan 1, 1970 UTC (a Unix
 	 * timestamp).
 	 *
 	 * @return A Unix timestamp representing the number of seconds elapsed since
@@ -118,7 +118,7 @@ extern "C" {
 	 * @brief Stops the time counter
 	 *
 	 * This function is intended to temporary stop the operation of the system
-	 * clock, however the underliying time base operates normaly.
+	 * clock, however the underlying time base operates normally.
 	 */
 	void timelib_halt_clock();
 
@@ -276,7 +276,7 @@ extern "C" {
 	 * time components and places the information on a standard time structure.
 	 *
 	 * @param timeinput The timestamp to convert
-	 * @param timeinfo Pointer to tm structure to strore the resuling time
+	 * @param timeinfo Pointer to tm structure to store the resulting time
 	 */
 	void timelib_break(timelib_t timeinput, struct tm * timeinfo);
 
@@ -298,9 +298,9 @@ extern "C" {
 }
 #endif
 
-/*-------------------------------------------------------------*/
-/*		Function like macros				*/
-/*-------------------------------------------------------------*/
+/*-------------------------------------------------------------*
+ *		Function like macros				*
+ *-------------------------------------------------------------*/
 /**
  * Alias for time_get() function
  */
@@ -392,12 +392,12 @@ extern "C" {
 #define timelib_secs_this_week(t)	(timelib_seconds_today(t) + ((timelib_dow(t)-1) * TIMELIB_SECS_PER_DAY))
 
 /**
- * Calculates the timestamp at mindnight of the last sunday
+ * Calculates the timestamp at midnight of the last Sunday
  */
 #define timelib_prev_sunday(t)		(t - timelib_secs_this_week(t))
 
 /**
- * Calculates the timestamp at the begining of the next sunday
+ * Calculates the timestamp at the beginning of the next Sunday
  */
 #define timelib_next_sunday(t)		(timelib_prev_sunday(t)+TIMELIB_SECS_PER_WEEK)
 

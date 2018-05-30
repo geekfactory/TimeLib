@@ -1,0 +1,73 @@
+#######################################
+# Syntax Coloring Map for TimeLib
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+timelib_set			KEYWORD2
+timelib_get			KEYWORD2
+timelib_halt_clock		KEYWORD2
+timelib_resume_clock		KEYWORD2
+timelib_get_status		KEYWORD2
+timelib_second_t		KEYWORD2
+timelib_minute_t		KEYWORD2
+timelib_hour_t			KEYWORD2
+timelib_wday_t			KEYWORD2
+timelib_day_t			KEYWORD2
+timelib_month_t			KEYWORD2
+timelib_year_t			KEYWORD2
+timelib_second			KEYWORD2
+timelib_minute			KEYWORD2
+timelib_hour			KEYWORD2
+timelib_wday			KEYWORD2
+timelib_day			KEYWORD2
+timelib_month			KEYWORD2
+timelib_year			KEYWORD2
+timelib_make			KEYWORD2
+timelib_break			KEYWORD2
+timelib_set_provider		KEYWORD2
+
+tlnow				KEYWORD2
+tlsecond			KEYWORD2
+tlminute			KEYWORD2
+tlhour				KEYWORD2
+tlwday				KEYWORD2
+tlday				KEYWORD2
+tlmonth				KEYWORD2
+tlyear				KEYWORD2
+timelib_tm2calendar		KEYWORD2
+timelib_calendar2tm		KEYWORD2
+timelib_tm2y2k			KEYWORD2
+timelib_y2k2tm			KEYWORD2
+timelib_dow			KEYWORD2
+timelib_elapsed_days		KEYWORD2
+timelib_seconds_today		KEYWORD2
+timelib_prev_midnight		KEYWORD2
+timelib_next_midnight		KEYWORD2
+timelib_secs_this_week		KEYWORD2
+timelib_prev_sunday		KEYWORD2
+timelib_next_sunday		KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+TIMELIB_VERSION_STRING		LITERAL1
+TIMELIB_SECS_PER_DAY		LITERAL1
+TIMELIB_SECS_PER_HOUR		LITERAL1
+TIMELIB_SECS_PER_MINUTE		LITERAL1
+TIMELIB_DAYS_PER_WEEK		LITERAL1
+TIMELIB_SECS_PER_WEEK		LITERAL1
+TIMELIB_SECS_PER_YEAR		LITERAL1
+TIMELIB_SECS_YEAR_2K		LITERAL1
+E_TIME_NOT_SET			LITERAL1
+E_TIME_NEEDS_SYNC		LITERAL1
+E_TIME_OK			LITERAL1
