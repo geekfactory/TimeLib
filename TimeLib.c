@@ -37,7 +37,7 @@ timelib_t sync_next = 0;
 
 /* Cache for current time */
 timelib_t tcache;
-struct tm telements;
+struct timelib_tm telements;
 
 /* Variable used to keep track of the last time the "seconds" or sys_time counter
  * was updated in "tick" units */
@@ -218,7 +218,7 @@ uint16_t timelib_year()
 	return timelib_year_t(timelib_get());
 }
 
-timelib_t timelib_make(struct tm * timeinfo)
+timelib_t timelib_make(struct timelib_tm * timeinfo)
 {
 	int i;
 	timelib_t tstamp;
@@ -248,7 +248,7 @@ timelib_t timelib_make(struct tm * timeinfo)
 	return tstamp;
 }
 
-void timelib_break(timelib_t timeinput, struct tm * timeinfo)
+void timelib_break(timelib_t timeinput, struct timelib_tm * timeinfo)
 {
 	uint8_t year;
 	uint8_t month, monthLength;

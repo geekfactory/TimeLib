@@ -55,9 +55,7 @@
 /*-------------------------------------------------------------*
  *		Typedefs enums & structs			*
  *-------------------------------------------------------------*/
-#if !defined(__time_t_defined)
 typedef uint32_t timelib_t;
-#endif
 
 /**
  * @brief Stores human readable time and date information
@@ -65,7 +63,7 @@ typedef uint32_t timelib_t;
  * Simplified structure to store human readable components of time /date similar
  * to the standard C structure for time information.
  */
-struct tm {
+struct timelib_tm {
 	uint8_t tm_sec; //!< Seconds
 	uint8_t tm_min; //!< Minutes
 	uint8_t tm_hour; //!< Hours
@@ -278,7 +276,7 @@ extern "C" {
 	 *
 	 * @return The UNIX Timestamp for the given time/date components
 	 */
-	timelib_t timelib_make(struct tm * timeinfo);
+	timelib_t timelib_make(struct timelib_tm * timeinfo);
 
 	/**
 	 * @brief Get human readable time from Unix time
@@ -289,7 +287,7 @@ extern "C" {
 	 * @param timeinput The timestamp to convert
 	 * @param timeinfo Pointer to tm structure to store the resulting time
 	 */
-	void timelib_break(timelib_t timeinput, struct tm * timeinfo);
+	void timelib_break(timelib_t timeinput, struct timelib_tm * timeinfo);
 
 	/**
 	 * @brief Sets the callback function that obtains precise time
@@ -315,7 +313,7 @@ extern "C" {
 /**
  * Alias for time_get() function
  */
-#define now()		timelib_get()
+#define tlnow()		timelib_get()
 
 /**
  * Alias for time_second() function
@@ -417,8 +415,6 @@ extern "C" {
  *-------------------------------------------------------------*/
 #if defined(CONFIG_TIMELIB_LEGACY_API)
 
-typedef uint32_t time_t;
-
 #define TIME_SECS_PER_DAY		TIMELIB_SECS_PER_DAY
 #define TIME_SECS_PER_HOUR		TIMELIB_SECS_PER_HOUR
 #define TIME_SECS_PER_MINUTE		TIMELIB_SECS_PER_MINUTE
@@ -427,6 +423,7 @@ typedef uint32_t time_t;
 #define TIME_SECS_PER_YEAR		TIMELIB_SECS_PER_YEAR
 #define TIME_SECS_YEAR_2K		TIMELIB_SECS_YEAR_2K
 
+#define now()			tlnow()
 #define time_set(x)		timelib_set(x)
 #define time_get()		timelib_get()
 #define time_halt_clock()	timelib_halt_clock()
