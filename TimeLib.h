@@ -32,7 +32,7 @@
 /**
  * Version string, should be changed in every release
  */
-#define TIMELIB_VERSION_STRING		"1.1.0"
+#define TIMELIB_VERSION_STRING		"2.0.0"
 
 /**
  * Enable function calls with names from version 1.0.0. Names where changed on
