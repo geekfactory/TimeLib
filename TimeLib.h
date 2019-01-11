@@ -396,6 +396,16 @@ extern "C" {
 #define timelib_next_midnight(t)	(timelib_prev_midnight(t) + TIMELIB_SECS_PER_DAY)
 
 /**
+ * Calculates the timestamp of the previous hour for the given time
+ */
+#define timelib_prev_hour(t)		(uint32_t)(( (uint32_t)t / (uint32_t)TIMELIB_SECS_PER_HOUR) * (uint32_t)TIMELIB_SECS_PER_HOUR)
+
+/**
+ * Calculates the timestamp of the next hour for the given time
+ */
+#define timelib_next_hour(t)		(timelib_prev_midnight(t) + TIMELIB_SECS_PER_HOUR)
+
+/**
  * Calculates the number of seconds elapsed since the start of the week
  */
 #define timelib_secs_this_week(t)	(timelib_seconds_today(t) + ((timelib_dow(t)-1) * TIMELIB_SECS_PER_DAY))
