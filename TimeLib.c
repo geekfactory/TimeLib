@@ -180,7 +180,7 @@ uint8_t timelib_month_t(timelib_t time)
 uint16_t timelib_year_t(timelib_t time)
 {
 	timelib_update(time);
-	return telements.tm_mon;
+	return telements.tm_year;
 }
 
 uint8_t timelib_second()

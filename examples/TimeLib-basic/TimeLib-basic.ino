@@ -10,7 +10,7 @@
 #include "TimeLib.h"
 
 // Structure that holds human readable time information;
-struct tm tinfo;
+struct timelib_tm tinfo;
 
 timelib_t now, initialt;
 // Store last time we sent the information
@@ -19,7 +19,7 @@ uint32_t last = 0;
 void setup()
 {
   // Configure serial port
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial);
 
   // Set time manually to 13:55:30 Jan 1st 2014
@@ -62,7 +62,6 @@ void loop()
     Serial.print(" ");
     Serial.print(tinfo.tm_year);
     Serial.println();
-
   }
 }
 

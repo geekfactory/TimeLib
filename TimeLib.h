@@ -32,14 +32,14 @@
 /**
  * Version string, should be changed in every release
  */
-#define TIMELIB_VERSION_STRING		"2.0.0"
+#define TIMELIB_VERSION_STRING		"2.1.0"
 
 /**
  * Enable function calls with names from version 1.0.0. Names where changed on
  * 1.1.0 to adhere to naming conventions. Define this macro to enable macros that 
  * allow us to use old function names comment it to use only new API names.
  */
-#define CONFIG_TIMELIB_LEGACY_API
+//#define CONFIG_TIMELIB_LEGACY_API
 
 /*-------------------------------------------------------------*
  *		Macros and definitions				*
